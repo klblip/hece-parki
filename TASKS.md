@@ -39,7 +39,7 @@
 - [x] P1-6 İçerik lint'i: harf kümesi, grup ataması, hece tutarlılığı, emoji ve resim-kelime eşliği, kelime/cümle tekrarı, cümle uzunluğu ve alfabe denetimi (8 test); cümle doğallığı insan denetiminde
 - [x] P1-7 Öğretmen paneli: kapsama özeti (5 grup) + JSON dışa/içe aktarma, doğrulamalı; `uygulama`da kapsama + dışa aktarma zaten vardı
 - [x] P1-8 Responsive/mobil: dört girişte de yakınlaştırma açık, dikeyde çalışır (gerçek cihaz testi yok)
-- [x] P1-9 Tarayıcı içi test altyapısı (`test/`): 86 test
+- [x] P1-9 Tarayıcı içi test altyapısı (`test/`): 89 test
 
 ## P2 — Konsolidasyon (kısmen tamamlandı)
 
@@ -77,7 +77,7 @@
 | 22.10.2026 | Onboarding + gizlilik + çevrimdışı testleri | ✅ 76/76 | 5 sayfada dış istek yok; `OGRETMEN-BASLANGIC.md`, `GIZLILIK.md` |
 | 22.10.2026 | Kurulum paketi 1.0 | ✅ | 32 dosya, zip bütünlüğü doğrulandı; HTTP 200 + `file://` render (5 kart, 29 çip); traversal 403 |
 | 22.10.2026 | Web sitesi paketi 1.0 | ✅ | 29 dosya, `.cmd`/`.ps1` yok; alt klasörde HTTP 200 (5 kart, 29 çip, 5 kapsama); bağlantı denetimi; konsol temiz; kök TTKB fontu |
-| 22.10.2026 | `test/test.html` güncel koşu | ✅ 86/86 | Hece Fabrikası + Roket testleri dahil; konsol hatası yok |
+| 22.10.2026 | `test/test.html` güncel koşu | ✅ 89/89 | Hece Fabrikası + Roket + sınıf puan tablosu testleri dahil; konsol hatası yok |
 | 22.10.2026 | localStorage kalıcılığı | ✅ | HTTP sitesinde yaz → yenile → başka sayfa oku; anahtarlar `okuyorum_v1`, `okuma_bayrami_v1`, oyun/rekor/fonem |
 | 22.10.2026 | GitHub Pages yayını | ✅ | https://klblip.github.io/hece-parki/ — `main`/`docs`; 18 etkinlik, 5 kart, 29 çip, 404, localStorage |
 | 21.10.2026 | Kök `index.html` kartları | ✅ 4/4 HTTP 200 | Dış bağlantı yok |

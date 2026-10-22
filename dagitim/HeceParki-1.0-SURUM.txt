@@ -2,11 +2,11 @@
 Surum       : 1.0
 Tarih       : 2026-10-22
 Dosya sayisi: 32
-Acik boyut  : 0.43 MB
+Acik boyut  : 0.44 MB
 Zip boyutu  : 0.14 MB
-SHA256      : 6F8107D33ADB32B5FD0E34FA4C96ECC84DD964E1E91054BDEE1423DB1C99213F
+SHA256      : 81FEE2705C13448DAFA982D9B1EA516A631C1FD5C0B92D072B3F818F5973E17B
 
-Kaynak testleri: 86/86 (test/test.html, yerel sunucu)
+Kaynak testleri: 89/89 (test/test.html, yerel sunucu)
 Paket testi    : sunucu.ps1 HTTP + file:// headless render (Edge/Chrome)
 
 Kurulum: KURULUM.md

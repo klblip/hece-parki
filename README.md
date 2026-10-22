@@ -42,9 +42,9 @@ powershell -ExecutionPolicy Bypass -File uygulama/sunucu.ps1   # http://localhos
 # veya proje kökünde herhangi bir statik sunucu, örn. 8124
 ```
 
-Sonra `http://localhost:<port>/test/test.html` adresini aç. Test paketi **86 test**
+Sonra `http://localhost:<port>/test/test.html` adresini aç. Test paketi **89 test**
 içerir (kanonik veri, heceleme, havuzlar, soru motoru, fonem, içerik lint'i, gerçek
-sayfa yükleme, çevrimdışılık, Hece Fabrikası ve Roket yarışı).
+sayfa yükleme, çevrimdışılık, Hece Fabrikası, Roket yarışı ve sınıf puan tablosu).
 
 ## Kurulum paketi (çevrimdışı)
 

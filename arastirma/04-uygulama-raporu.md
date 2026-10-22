@@ -21,7 +21,7 @@ varsayım** ayrımını korur. Her iddia için kanıt türü belirtilmiştir.
 - Yazı tipi: TTKB Dik Temel Abece, **kopyalanmadan** `local()` ile; beş girişte etkin.
 - Erişilebilirlik: `aria-live`, `focus-visible`, `aria-label`, `prefers-reduced-motion`,
   yakınlaştırmanın açılması.
-- Tarayıcı test paketi: **86/86 geçti** (9 kanonik veri, 17 heceleme, 3 adaptör,
+- Tarayıcı test paketi: **89/89 geçti** (9 kanonik veri, 17 heceleme, 3 adaptör,
   14 havuz/soru, 5 fonem, 8 içerik lint'i, 15 gerçek sayfa yükleme, 5 çevrimdışılık,
   5 Hece Fabrikası).
 - İki oyunun ortak yardımcıları tek çekirdekte (`assets/oyun-cekirdek.js`); oyun
@@ -46,7 +46,7 @@ varsayım** ayrımını korur. Her iddia için kanıt türü belirtilmiştir.
 | `okuma-bayrami/js/soru.js` | Durum, havuzlar, 6 soru tipi | Tek dosyadaki soru motorunu ayrıştırmak |
 | `okuma-bayrami/js/ses.js` | TTS, fonem, efekt, konfeti, toast | Ses katmanını oyundan ayırmak |
 | `okuma-bayrami/js/oyun.js` | 4 oyun, panel, kura, puanlar | Oyun katmanı |
-| `test/test.html` | 86 tarayıcı testi | P0/P1/P2/P3 doğrulaması |
+| `test/test.html` | 89 tarayıcı testi | P0/P1/P2/P3 doğrulaması |
 | `okuma-bayrami/KULLANIM.md` | Oyun ve panel kılavuzu | Öğretmenin kullanabilmesi |
 | `OGRETMEN-BASLANGIC.md` | 10 dakikalık kurulum, ses kontrolü, 15 dakikalık ders akışı, sorun giderme | İlk kullanım eşiğini düşürmek (P2-5) |
 | `GIZLILIK.md` | Yerel veri envanteri, mikrofon, silme adımları, KVKK sınırı | Şeffaflık ve okul politikasına uyum (P2-6) |
@@ -97,7 +97,7 @@ varsayım** ayrımını korur. Her iddia için kanıt türü belirtilmiştir.
 ### 3.1 Otomatik testler — `test/test.html`
 
 Çalıştırma: yerel sunucu (`http://localhost:8124/test/test.html`), Chrome/Edge.
-Sonuç: **86/86 geçti**, konsol hatası yok.
+Sonuç: **89/89 geçti**, konsol hatası yok.
 
 | Bölüm | Test | Ne doğrulanıyor |
 |---|---|---|
@@ -159,7 +159,7 @@ gerçekten 1. grup mu", "oyun içi hece uydurma mı" soruları tarayıcıda öl�
 | 11. Çevrimdışı | ✅ | Dış `src`/`href` yok; font `local()`, ses sentezi/TTS |
 | 12. Telif | ✅ | Rakip kod/görsel/ses/metin kopyalanmadı; yalnız ilke |
 | 13. Font lisansı | ✅ | Font dosyası depoda yok; `local()` + yedek yığın |
-| 14. Test zorunluluğu | ✅ | 86 test; P0/P1/P2/P3 değişiklikleri kapsandı |
+| 14. Test zorunluluğu | ✅ | 89 test; P0/P1/P2/P3 değişiklikleri kapsandı |
 | 15. Kapsam disiplini | ✅ | Yeni oyun/etkinlik eklenmedi |
 
 ---
@@ -263,7 +263,7 @@ kaynak olduğu için içerik geri alımı tüm uygulamaları birlikte etkiler (b
 ## 8. Sonuç
 
 P0 ve P1'in tamamı ile P2'nin konsolidasyon, onboarding ve gizlilik maddeleri
-tamamlandı; dört uygulama aynı müfredat kurallarıyla çalışıyor ve bunu **86 otomatik
+tamamlandı; dört uygulama aynı müfredat kurallarıyla çalışıyor ve bunu **89 otomatik
 test** doğruluyor. Çevrimdışı kurulum paketi (`dagitim/HeceParki-1.0.zip`, 32 dosya)
 ve sunucusuz statik web sitesi (`dagitim/HeceParki-Web/`, 29 dosya) üretildi; zip
 bütünlüğü, HTTP/alt klasör, bağlantı denetimi ve `file://` render duman testlerinden

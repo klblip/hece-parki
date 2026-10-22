@@ -118,7 +118,7 @@ $surumNotu = @(
   "Zip boyutu  : $zipBoyut MB",
   "SHA256      : $hash",
   "",
-  "Kaynak testleri: 86/86 (test/test.html, yerel sunucu)",
+  "Kaynak testleri: 89/89 (test/test.html, yerel sunucu)",
   "Paket testi    : sunucu.ps1 HTTP + file:// headless render (Edge/Chrome)",
   "",
   "Kurulum: KURULUM.md",

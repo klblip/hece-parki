@@ -5,6 +5,15 @@ göre hazırlanmış, **çevrimdışı** çalışan, reklamsız ve dokunmatik uy
 okuma-yazma etkinlikleri. Dış istek yoktur: yazı tipi, ses ve görseller yerel
 dosyalardan gelir.
 
+## Canlı site
+
+- **Yayın adresi:** https://klblip.github.io/hece-parki/
+- **GitHub deposu:** https://github.com/klblip/hece-parki
+- GitHub Pages kaynağı: `main` dalındaki **`docs/`** klasörü.
+- `docs/`, `dagitim/HeceParki-Web/` klasörünün yayın kopyasıdır. Siteyi
+  güncelledikten sonra `dagitim/HeceParki-Web` içeriğini `docs/` altına kopyalayıp
+  `git push` yapın.
+
 ## Nasıl açılır?
 
 1. `index.html` dosyasına **çift tıkla** → oyun parkı açılır.
@@ -33,9 +42,9 @@ powershell -ExecutionPolicy Bypass -File uygulama/sunucu.ps1   # http://localhos
 # veya proje kökünde herhangi bir statik sunucu, örn. 8124
 ```
 
-Sonra `http://localhost:<port>/test/test.html` adresini aç. Test paketi **86 test**
+Sonra `http://localhost:<port>/test/test.html` adresini aç. Test paketi **89 test**
 içerir (kanonik veri, heceleme, havuzlar, soru motoru, fonem, içerik lint'i, gerçek
-sayfa yükleme, çevrimdışılık, Hece Fabrikası ve Roket yarışı).
+sayfa yükleme, çevrimdışılık, Hece Fabrikası, Roket yarışı ve sınıf puan tablosu).
 
 ## Kurulum paketi (çevrimdışı)
 

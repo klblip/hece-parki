@@ -34,7 +34,7 @@ assets/
   sesler/          kayıtlı fonem manifesti (boş başlar)
   fonts/           font lisans notu (dosya yok)
 test/
-  test.html        tarayıcı içi testler (86 assertion, iframe dahil)
+  test.html        tarayıcı içi testler (89 assertion, iframe dahil)
 araclar/
   paket-olustur.ps1  kurulum paketi üretir (dagitim/HeceParki-*.zip)
   web-olustur.ps1    statik web sitesi üretir (dagitim/HeceParki-Web/)

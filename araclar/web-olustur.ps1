@@ -199,7 +199,7 @@ $surumNotu = @(
   "SHA256      : $hash",
   "Baglanti    : $baglantiSayisi yerel baglanti denetlendi",
   "",
-  "Kaynak testleri: 86/86 (test/test.html, yerel sunucu)",
+  "Kaynak testleri: 89/89 (test/test.html, yerel sunucu)",
   "Site testi    : HTTP kok + alt klasor + file:// render",
   "",
   "Yayinlama: YAYIN.md",

@@ -4,10 +4,10 @@ Tarih       : 2026-10-22
 Dosya sayisi: 29
 Acik boyut  : 0.43 MB
 Zip boyutu  : 0.14 MB
-SHA256      : 8071B8E9A5B9BF0B5CDFCD310164883B9BB0962AFA55A6276FBD40A892386554
+SHA256      : 1F8DC2CA2485916B63E60DF9AC48D5EF264B60CF3C6BF92505A1BF880E30FF62
 Baglanti    : 38 yerel baglanti denetlendi
 
-Kaynak testleri: 86/86 (test/test.html, yerel sunucu)
+Kaynak testleri: 89/89 (test/test.html, yerel sunucu)
 Site testi    : HTTP kok + alt klasor + file:// render
 
 Yayinlama: YAYIN.md
