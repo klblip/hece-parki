@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Okuyorum — Öğretmen Etkinlik Uygulaması</title>
+<link rel="stylesheet" href="assets/font.css">
+<style>
+  body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
+    font-family:var(--dik-temel,"Segoe UI",system-ui,sans-serif);
+    background:linear-gradient(160deg,#159c8a,#2ec4d6 65%,#7ee0e8);color:#0d4d43}
+  .kutu{background:#fff;border-radius:24px;padding:28px 34px;max-width:420px;text-align:center;
+    box-shadow:0 10px 0 rgba(0,0,0,.15)}
+  h1{font-size:30px;margin:0 0 10px}
+  p{margin:0 0 18px;line-height:1.5}
+  a.but{display:inline-block;background:linear-gradient(180deg,#37d3c4,#0e8f80);color:#fff;
+    text-decoration:none;font-weight:800;padding:12px 26px;border-radius:14px;box-shadow:0 5px 0 rgba(0,0,0,.25)}
+  a.but:focus-visible{outline:4px solid #0d4d43;outline-offset:3px}
+</style>
+<script>
+/* Okuyorum web paketi girisi: uygulama klasorune gonderir (ayni adres altinda) */
+location.replace("uygulama/index.html");
+</script>
+</head>
+<body>
+  <main class="kutu">
+    <h1>📘 Okuyorum</h1>
+    <p>Öğretmen etkinlik uygulaması yükleniyor… Açılmazsa aşağıdaki bağlantıyı kullanın.</p>
+    <a class="but" href="uygulama/index.html">Uygulamayı Aç</a>
+  </main>
+</body>
+</html>

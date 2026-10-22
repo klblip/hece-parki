@@ -22,6 +22,10 @@ Aşağıdaki yollardan biri:
 2. **Grup ekranı** — üstte hızlı grup geçişi (ANETİL · OKURIM · ÜSÖYDZ · ÇBGCŞ · PHVĞFJ · TÜM SESLER),
    ortada o grubun harf kutuları (basınca harf söylenir), altta etkinlik kartları.
 3. **Etkinlik ekranı** — üstte sesli talimat çipi (basınca tekrar okur), ortada büyük dokunmatik tuşlar.
+4. **🏆 Sınıf Puan Tablosu** — üst bardaki 🏆 düğmesi; Hafıza, Fabrika Yarışı ve Roket Yarışı bitince oyuncuların
+   puanları **sınıf listesine otomatik** yazılır. Haftalık tablo: ilk **3** podyuma çıkar 🥇🥈🥉, listedeki herkes görünür.
+   **Yeni hafta** (pazartesi) başlayınca tablo kendiliğinden sıfırlanır ve eski tablonun ilk üçü
+   "Geçmiş haftaların şampiyonları" satırına arşivlenir. Puan çipindeki ⭐ ise bütün etkinliklerin toplamıdır.
 
 ## Aşama sistemi (harf harf ilerleyiş)
 
@@ -100,7 +104,7 @@ Yönetici panelinde:
 - 29 harfin sırasiyla listesi çıkar; **sessiz harflerde harf adını ("te") DEĞİL sesin kendisini** söyle — her harfin altında nasıl çıkacağına dair not var.
 - **🎙️ Kaydı başlat** → sesi söyle → **⏳ DURDUR** → kayıt otomatik kırpılır, ses seviyesi düzelir, dinletilir. Ardından **💾 Kaydet** tuşuyla kalıcılaştır (otomatik de kaydolur; 💾 hem onay hem onarım içindir). Beğenmezsen aynı harfi seçip yeniden kaydet.
 - Kayıtlar Okuyorum etkinliklerinde **önce kullanılır**; kayıt yoksa WebAudio fonem sentezi, o da yoksa TTS yedeği.
-- **⬇️ kayitlar.js indir**: kayıtları dosya olarak alır. Dosyayı `assets/sesler/kayitlar.js` olarak kaydedip kayıtları kullanacak sayfaya script satırını ekleyin: `uygulama/index.html` için `<script src="../assets/sesler/kayitlar.js"></script>`, `okuma-bayrami-1-sinif.html` için `<script src="assets/sesler/kayitlar.js"></script>`. Hece Rallisi ve Aç Canavar kayıtları okumaz (fonem sentezi + TTS).
+- **⬇️ kayitlar.js indir**: kayıtları dosya olarak alır. Dosyayı `assets/sesler/kayitlar.js` olarak kaydedip `uygulama/index.html` sayfasına `<script src="../assets/sesler/kayitlar.js"></script>` satırını ekleyin. Hece Rallisi ve Aç Canavar kayıtları okumaz (fonem sentezi + TTS).
 - Mikrofon izni, ilk kayıtta tarayıcı ister; kayıtlar yalnız bu tarayıcıda saklanır.
 
 ## Teknik yapısı
@@ -122,8 +126,8 @@ assets/
   font.css     → TTKB local() + yedek yığın
 ```
 
-Kanonik veri tek yerde tutulur: `assets/veri.js`. `uygulama`, `okuma-bayrami` ve iki
-oyun da harf sırasını, kelime bankasını ve heceleme kuralını buradan okur; bu yüzden
-kelime eklerken yalnızca `assets/veri.js` düzenlenir.
+Kanonik veri tek yerde tutulur: `assets/veri.js`. `uygulama` ve iki oyun da harf
+sırasını, kelime bankasını ve heceleme kuralını buradan okur; bu yüzden kelime
+eklerken yalnızca `assets/veri.js` düzenlenir.
 
 Tarayıcı gereksinimi: Chrome/Edge (Pointer Events + speechSynthesis destekli). Tablet ve akıllı tahta dokunmaları pointer olaylarıyla desteklenir; `touch-action:none` ile sayfa kaydırma engellenir.

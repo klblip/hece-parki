@@ -1,14 +1,14 @@
-﻿Hece Parki - statik web sitesi
+﻿Hece Parki - statik web sitesi (ana site: Okuyorum + iki oyun)
 Surum       : 1.0
-Tarih       : 2026-10-22
-Dosya sayisi: 29
-Acik boyut  : 0.43 MB
-Zip boyutu  : 0.14 MB
-SHA256      : 1F8DC2CA2485916B63E60DF9AC48D5EF264B60CF3C6BF92505A1BF880E30FF62
-Baglanti    : 38 yerel baglanti denetlendi
+Tarih       : 2026-10-23
+Dosya sayisi: 21
+Acik boyut  : 0.31 MB
+Zip boyutu  : 0.1 MB
+SHA256      : A071560617E6189D23B90B2B7B1FC64E31B821DAA396502B466875C6611726C0
+Baglanti    : 25 yerel baglanti denetlendi
 
-Kaynak testleri: 89/89 (test/test.html, yerel sunucu)
-Site testi    : HTTP kok + alt klasor + file:// render
-
-Yayinlama: YAYIN.md
+Kaynak testleri: 90/90 (test/test.html, yerel sunucu)
+Urunler: Hece Parki ana site (Okuyorum + iki oyun); Okuyorum ayri uygulama paketi.
 Gizlilik : GIZLILIK.md
+Yayinlama: YAYIN.md
+Ana site Okuyorum'dur; Hece Rallisi ve Ac Canavar ana ekrandaki Oyunlar bolumundedir.

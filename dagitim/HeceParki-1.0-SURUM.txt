@@ -1,13 +1,12 @@
-﻿Hece Parki - kurulum paketi
+﻿Hece Parki - kurulum paketi (ana site: Okuyorum + iki oyun)
 Surum       : 1.0
-Tarih       : 2026-10-22
-Dosya sayisi: 32
-Acik boyut  : 0.44 MB
-Zip boyutu  : 0.14 MB
-SHA256      : 81FEE2705C13448DAFA982D9B1EA516A631C1FD5C0B92D072B3F818F5973E17B
+Tarih       : 2026-10-23
+Dosya sayisi: 24
+Acik boyut  : 0.32 MB
+Zip boyutu  : 0.11 MB
+SHA256      : FFAA94AF99212EA74E14A96515D84D0100208CB6E37114E0F1FFBD6FEC52D61F
 
-Kaynak testleri: 89/89 (test/test.html, yerel sunucu)
-Paket testi    : sunucu.ps1 HTTP + file:// headless render (Edge/Chrome)
-
-Kurulum: KURULUM.md
-Gizlilik: GIZLILIK.md
+Kaynak testleri: 90/90 (test/test.html, yerel sunucu)
+Urunler: Hece Parki ana site (Okuyorum + iki oyun); Okuyorum ayri uygulama paketi.
+Gizlilik: paket icindeki GIZLILIK.md
+Bu paket ana sitedir: Okuyorum + Hece Rallisi + Ac Canavar. Okuma Bayrami yayin disidir.

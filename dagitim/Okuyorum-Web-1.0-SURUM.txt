@@ -1,0 +1,13 @@
+﻿Okuyorum - statik web sitesi (ogretmen etkinlik uygulamasi)
+Surum       : 1.0
+Tarih       : 2026-10-23
+Dosya sayisi: 15
+Acik boyut  : 0.22 MB
+Zip boyutu  : 0.07 MB
+SHA256      : A98A1F1B6DB6B59E4D7C3A78E6F17ED27AE5E45160AD430A125CB0CA0BB537BD
+Baglanti    : 11 yerel baglanti denetlendi
+
+Kaynak testleri: 90/90 (test/test.html, yerel sunucu)
+Urunler: Hece Parki ana site (Okuyorum + iki oyun); Okuyorum ayri uygulama paketi.
+Gizlilik : GIZLILIK.md
+Yayinlama rehberi: kok WEB-YAYIN.md; Okuyorum kendi alt adresinde sunulur.

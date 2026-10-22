@@ -16,8 +16,8 @@ dosyalardan gelir.
 
 ## Nasıl açılır?
 
-1. `index.html` dosyasına **çift tıkla** → oyun parkı açılır.
-2. Kartlardan birine tıkla → ilgili uygulama açılır.
+1. `index.html` dosyasına **çift tıkla** → Okuyorum ana ekranı açılır.
+2. Bir ses grubu seç → etkinlikler; **Oyunlar** bölümünden Hece Rallisi veya Aç Canavar'ı aç.
 3. Ses için cihaz sesi açık olmalı.
 
 > Kurulum paketinde **`Sunucu-Baslat.cmd`** dosyasına çift tıklayın (yalnız bu
@@ -42,14 +42,14 @@ powershell -ExecutionPolicy Bypass -File uygulama/sunucu.ps1   # http://localhos
 # veya proje kökünde herhangi bir statik sunucu, örn. 8124
 ```
 
-Sonra `http://localhost:<port>/test/test.html` adresini aç. Test paketi **89 test**
+Sonra `http://localhost:<port>/test/test.html` adresini aç. Test paketi **90 test**
 içerir (kanonik veri, heceleme, havuzlar, soru motoru, fonem, içerik lint'i, gerçek
 sayfa yükleme, çevrimdışılık, Hece Fabrikası, Roket yarışı ve sınıf puan tablosu).
 
 ## Kurulum paketi (çevrimdışı)
 
-Okul cihazına kopyalanacak hazır paket: **`dagitim/HeceParki-1.0.zip`** (32 dosya,
-~0,14 MB). İçinde `Baslat.cmd`, `Sunucu-Baslat.cmd`, `KURULUM.md` ve yalnız çalışma
+Okul cihazına kopyalanacak hazır paket: **`dagitim/HeceParki-1.0.zip`** (24 dosya,
+~0,11 MB). İçinde `Baslat.cmd`, `Sunucu-Baslat.cmd`, `KURULUM.md` ve yalnız çalışma
 zamanı dosyaları vardır; testler/araştırma raporları girmez.
 
 Yeniden üretmek için:
@@ -65,7 +65,7 @@ Kurulum adımları: **`KURULUM.md`**. Paket yalnız bu bilgisayarda çalışır;
 
 Aynı uygulamanın sunucusuz, yayına hazır HTML sürümü:
 
-- **`dagitim/HeceParki-Web/`** — 29 dosya; `.cmd`/`.ps1`, test ve araştırma yok.
+- **`dagitim/HeceParki-Web/`** — 21 dosya; `.cmd`/`.ps1`, test ve araştırma yok.
 - **`dagitim/HeceParki-Web-1.0.zip`** — sıkıştırılmış kopya.
 - **`404.html`** — özel hata sayfası.
 
@@ -84,14 +84,17 @@ yoktur. Mikrofon için HTTPS veya `localhost` gerekir. Service worker yoktur; ta
 > kurulu olduğu için site doğru görünür. Ziyaretçi cihazında font yoksa sistem fontuna
 > düşer; font dosyasını siteye gömmek/dağıtmak için hak sahibinden izin gerekir.
 
-## Dört giriş noktası
+## Üç giriş noktası
 
 | # | Uygulama | Dosya | İçerik |
 |---|---|---|---|
-| 1 | **Okuyorum** | `uygulama/index.html` | 18 etkinlik + öğretmen paneli + Fonem Stüdyo + çarkıfelek |
-| 2 | **Okuma Bayramı** | `okuma-bayrami-1-sinif.html` | 4 oyun (Uçan Balon, Tavşan Yarışı, Hafıza, Cümle Kurma) |
-| 3 | **Hece Rallisi** | `oyunlar/hece-rallisi/index.html` | Kapı okuma yarışı, 2 hayalet araba, rekorlar |
-| 4 | **Aç Canavar** | `oyunlar/ac-canavar/index.html` | Lokma seçme; tek canavar veya 2 kişi yarış |
+| 1 | **Okuyorum** | `uygulama/index.html` | 18 etkinlik + öğretmen paneli + Fonem Stüdyo + çarkıfelek; ana ekranda iki oyun bağlantısı |
+| 2 | **Hece Rallisi** | `oyunlar/hece-rallisi/index.html` | Kapı okuma yarışı, 2 hayalet araba, rekorlar |
+| 3 | **Aç Canavar** | `oyunlar/ac-canavar/index.html` | Lokma seçme; tek canavar veya 2 kişi yarış |
+
+Kök `index.html` doğrudan Okuyorum'a yönlendirir. Hece Rallisi ve Aç Canavar,
+Okuyorum ana ekranındaki **Oyunlar** bölümünden açılır. Okuma Bayramı oyunları
+yayın paketine ve web sitesine dahil edilmez; kaynağı arşivde tutulur.
 
 ## Resmî harf sırası
 
@@ -146,19 +149,13 @@ araclar/paket-olustur.ps1   → çevrimdışı kurulum paketini üretir
 araclar/web-olustur.ps1     → statik web sitesi paketini üretir
 Baslat.cmd                  → hızlı önizleme (file://; veri paylaşımı sınırlı)
 Sunucu-Baslat.cmd, sunucu.ps1 → önerilen: localhost:8123 üzerinde yerel HTTP sunucusu
-index.html                  → oyun parkı (giriş; TTKB local font)
+index.html                  → Okuyorum'a yönlendirme (ana giriş)
 404.html                    → web sitesi hata sayfası
 WEB-YAYIN.md                → web sitesi yayınlama kılavuzu
 OGRETMEN-BASLANGIC.md        → 10 dakikalık öğretmen kurulumu
 GIZLILIK.md                  → gizlilik ve veri notu
-okuma-bayrami-1-sinif.html  → Okuma Bayramı kabuğu (modülleri yükler)
-okuma-bayrami/
-  css/stil.css              → tema
-  js/yardim.js              → ortak küçük yardımcılar ($, rnd, yaz…)
-  js/veri.js                → kanonik veri adaptörü (OrtakVeri)
-  js/soru.js                → durum, havuzlar, 6 soru tipi
-  js/ses.js                 → TTS, fonem, konfeti, toast
-  js/oyun.js                → 4 oyun + panel + kura
+okuma-bayrami-1-sinif.html  → yayın dışı arşiv (web/paket dışı)
+okuma-bayrami/              → yayın dışı arşiv (web/paket dışı)
 oyunlar/
   hece-rallisi/index.html   → Hece Rallisi (tek dosya)
   ac-canavar/index.html     → Aç Canavar (tek dosya)
@@ -196,7 +193,7 @@ yeterlidir (tüm yerel kayıtları siler).
 ## Bilinen sınırlamalar
 
 - Kayıtlı fonem/hece/kelime dosyaları henüz yok; fonem sentezi ve TTS yedeği kullanılıyor.
-- `file://` ile temel açılış (kartlar, ana ekran, 29 harf çipi) headless Chrome'da
+- `file://` ile temel açılış (Okuyorum yönlendirmesi, ana ekran, 29 harf çipi) headless Chrome'da
   doğrulandı; ses, mikrofon ve `localStorage` kalıcılığı bu modda denenmedi. Sınıf
   kurulumu için yerel sunucu veya kısayol önerilir.
 - Akıllı tahta ve gerçek dokunmatik cihaz testi yapılmadı.

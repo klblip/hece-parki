@@ -118,8 +118,9 @@ birimine aittir.
 
 ## Yayın öncesi kontrol listesi
 
-- [ ] Ana sayfa açılıyor; 4 kart + 1 "Yakında" görünüyor.
-- [ ] Okuyorum, Okuma Bayramı ve iki oyun açılıyor.
+- [ ] Ana sayfa açılıyor; doğrudan Okuyorum ana ekranına yönleniyor.
+- [ ] Okuyorum ana ekranında **Oyunlar** bölümü ve iki oyun kartı görünüyor.
+- [ ] Hece Rallisi ve Aç Canavar açılıyor; geri bağlantısı Okuyorum'a dönüyor.
 - [ ] İki oyunda 29 harf çipi listeleniyor.
 - [ ] Ses duyuluyor; sessiz harfte harf adı değil ses çıkıyor.
 - [ ] TTKB fontu kurulu cihazda dik temel yazı görünüyor.

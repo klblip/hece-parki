@@ -150,6 +150,25 @@ function anaEkran(){
   });
   main.append(kartlar);
   main.append(el("div","","<p style='text-align:center;opacity:.75;font-size:16px'>Bir ses grubu seç ve etkinliklere başla! Her doğru cevap puanına puan katar. ⭐</p>"));
+
+  const oyunlar=el("div","anaOyunlar");
+  oyunlar.innerHTML=`
+    <h2 class="anaOyunBaslik">Oyunlar</h2>
+    <div class="anaOyunKartlar">
+      <a class="anaOyunKart" href="../oyunlar/hece-rallisi/index.html" aria-label="Hece Rallisi oyununu aç">
+        <span class="anaOyunIkon" aria-hidden="true">🏎️</span>
+        <span class="anaOyunMetin"><b>Hece Rallisi</b><small>Harf, hece ve kelime yarışı</small></span>
+        <span class="anaOyunOk" aria-hidden="true">→</span>
+      </a>
+      <a class="anaOyunKart" href="../oyunlar/ac-canavar/index.html" aria-label="Aç Canavar oyununu aç">
+        <span class="anaOyunIkon" aria-hidden="true">👾</span>
+        <span class="anaOyunMetin"><b>Aç Canavar</b><small>Hece lokmalarını doğru seç</small></span>
+        <span class="anaOyunOk" aria-hidden="true">→</span>
+      </a>
+    </div>`;
+  oyunlar.querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>SES.tus()));
+  main.append(oyunlar);
+
   document.getElementById("baslik").textContent="Okuyorum"; baslikPop();
 }
 
@@ -2502,11 +2521,15 @@ function sinifHafta(){
 function haftaKontrol(){
   const h=sinifHafta();
   if(kayit.clsHafta!==h){
-    if(kayit.clsHafta&&kayit.clsSkor&&Object.keys(kayit.clsSkor).length){
-      const sira=Object.entries(kayit.clsSkor).sort((a,b)=>b[1]-a[1]).slice(0,3).map(x=>({ad:x[0],puan:x[1]}));
-      kayit.clsArsiv=[{hafta:kayit.clsHafta, sira}].concat(kayit.clsArsiv||[]).slice(0,12);
+    if(kayit.clsHafta){   /* gerçek hafta geçişi: eski tabloyu arşivle, sıfırla */
+      if(kayit.clsSkor&&Object.keys(kayit.clsSkor).length){
+        const sira=Object.entries(kayit.clsSkor).sort((a,b)=>b[1]-a[1]).slice(0,3).map(x=>({ad:x[0],puan:x[1]}));
+        kayit.clsArsiv=[{hafta:kayit.clsHafta, sira}].concat(kayit.clsArsiv||[]).slice(0,12);
+      }
+      kayit.clsSkor={};
     }
-    kayit.clsSkor={}; kayit.clsHafta=h; kayitYaz();
+    /* clsHafta hiç yoksa (ilk açılış): mevcut puanlar bu haftaya ait kabul edilir */
+    kayit.clsHafta=h; kayitYaz();
   }
 }
 /* oyunlardan gelen (ad,puan) çiftlerini sınıf tablosuna yazar.

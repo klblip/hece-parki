@@ -1,8 +1,8 @@
 # Gizlilik ve veri notu
 
-**Son güncelleme:** 22.10.2026
-**Kapsam:** Hece Parkı (kök `index.html`), Okuyorum (`uygulama/`), Okuma Bayramı
-(`okuma-bayrami-1-sinif.html`), Hece Rallisi ve Aç Canavar (`oyunlar/`).
+**Son güncelleme:** 23.10.2026
+**Kapsam:** Hece Parkı (kök `index.html` → Okuyorum), Okuyorum (`uygulama/`),
+Hece Rallisi ve Aç Canavar (`oyunlar/`).
 
 ## Kısa özet
 
@@ -14,7 +14,7 @@
 
 ## Ağ ve dış istekler
 
-- Dört girişte de dış `http(s)` bağlantısı yoktur; bu, otomatik testle denetlenir.
+- Üç girişte de dış `http(s)` bağlantısı yoktur; bu, otomatik testle denetlenir.
 - **Web sürümü:** Sayfa dosyaları barındırma sağlayıcısından gelir; sağlayıcı standart
   web sunucusu günlüklerinde sayfa isteklerini (IP, tarih) tutabilir. Uygulama öğrenci
   verisi göndermez. Web sürümünde sunucu tarafı kod yoktur.
@@ -32,7 +32,6 @@
 | Anahtar | İçerik | Nerede oluşur |
 |---|---|---|
 | `okuyorum_v1` | Puan, aşama seçimi, grup kilidi, öğretmenin kelime/cümle düzenlemeleri, skorlar, son oyuncu adı, öğrenci listesi (en fazla 60 ad), oyun modları | Okuyorum |
-| `okuma_bayrami_v1` | Öğrenci adları, seçilen harfler, soru tipleri, tur sayısı, ses ayarları, skorlar | Okuma Bayramı |
 | `ralli_isim` | Son oyuncu adı | Hece Rallisi |
 | `ralliRekorlar` | Son 20 rekor (ad, süre, mod) | Hece Rallisi |
 | `canavar_isim` | Son oyuncu ad(lar)ı | Aç Canavar |

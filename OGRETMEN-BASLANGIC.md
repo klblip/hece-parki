@@ -1,7 +1,7 @@
 # Öğretmen hızlı başlangıç — 10 dakika
 
 Bu kılavuz Hece Parkı'nı ilk kez açan öğretmen içindir. Ayrıntılı kullanım:
-`uygulama/KULLANIM.md`, `okuma-bayrami/KULLANIM.md`. Gizlilik: `GIZLILIK.md`.
+`uygulama/KULLANIM.md`. Gizlilik: `GIZLILIK.md`.
 
 > **Web sürümü:** Kurulum gerekmez; site adresini açın. `Baslat.cmd` ve
 > `Sunucu-Baslat.cmd` yalnız çevrimdışı pakette bulunur. Adlar, puanlar ve ayarlar
@@ -42,7 +42,6 @@ Okuyorum → öğretmen paneli → **🎤 Fonem Stüdyo**.
   `assets/sesler/kayitlar.js` olarak kaydedin → kayıtları kullanacak sayfaya script
   satırını ekleyin:
   - `uygulama/index.html` → `<script src="../assets/sesler/kayitlar.js"></script>`
-  - `okuma-bayrami-1-sinif.html` → `<script src="assets/sesler/kayitlar.js"></script>`
   - Hece Rallisi ve Aç Canavar şu an kayıtları okumaz; onlarda WebAudio fonem sentezi ve
     TTS kullanılır.
 - Kayıt yoksa uygulama WebAudio sentezine, o da yoksa TTS'ye düşer; ders aksamaz.
@@ -60,7 +59,6 @@ gruplar kilitlenir. Böylece öğrenciler öğretilmemiş harflerle karşılaşm
 | Giriş | Ne için | Süre |
 |---|---|---|
 | **Okuyorum** | Günlük ders: 18 etkinlik, öğretmen paneli, çarkıfelek | 10–20 dk |
-| **Okuma Bayramı** | Tekrar ve eğlence: 4 oyun (Uçan Balon, Tavşan Yarışı, Hafıza, Cümle Kurma) | 5–10 dk |
 | **Hece Rallisi** | Akıcı okuma yarışı; 2 oyuncu veya 2 hayalet araba | 3–5 dk |
 | **Aç Canavar** | Hece tanıma; tek canavar veya 2 kişi yarış | 3–5 dk |
 

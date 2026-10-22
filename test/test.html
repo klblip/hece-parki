@@ -424,7 +424,10 @@ function iframeTest(ad, url, fn) {
   };
   f.onerror = function () { sonuc(false, "sayfa yüklenemedi"); };
   document.body.appendChild(f);
-  setTimeout(function () { sonuc(false, "zaman aşımı (15 sn)"); }, 15000);
+  /* zaman duvarı: file:// için 15 sn; yavaş yerel http sunucusunda ?taim=<sn> ile esnetilir */
+  var MBA = new URLSearchParams(location.search);
+  var TAIM = (parseInt(MBA.get("taim"), 10) || 15) * 1000;
+  setTimeout(function () { sonuc(false, "zaman aşımı (" + (TAIM / 1000) + " sn)"); }, TAIM);
 }
 
 iframeTest("hece-rallisi: resmî 1. grup yüklü", "../oyunlar/hece-rallisi/index.html", function (w) {
@@ -606,6 +609,15 @@ iframeTest("kök index.html: dış istek yok", "../index.html", function (w, d) 
 iframeTest("uygulama: dış istek yok", "../uygulama/index.html", function (w, d) {
   var u = uzakIstekler(w, d);
   return u.length === 0 || "dış: " + u.slice(0, 3).join(" | ");
+});
+iframeTest("uygulama: ana ekranda iki oyun bağlantısı", "../uygulama/index.html", function (w, d) {
+  var kartlar = Array.prototype.slice.call(d.querySelectorAll(".anaOyunKart"));
+  if (kartlar.length !== 2) return "oyun kartı: " + kartlar.length;
+  var hedefler = kartlar.map(function (a) { return a.getAttribute("href"); });
+  if (hedefler.indexOf("../oyunlar/hece-rallisi/index.html") < 0) return "Hece Rallisi bağlantısı yok";
+  if (hedefler.indexOf("../oyunlar/ac-canavar/index.html") < 0) return "Aç Canavar bağlantısı yok";
+  if (!d.querySelector(".anaOyunBaslik")) return "Oyunlar başlığı yok";
+  return true;
 });
 iframeTest("okuma-bayrami: dış istek yok", "../okuma-bayrami-1-sinif.html", function (w, d) {
   var u = uzakIstekler(w, d);

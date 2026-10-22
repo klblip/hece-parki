@@ -1,223 +1,32 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#7ec8ff">
-<link rel="stylesheet" href="assets/font.css">
-<title>Hece Parkı — 1. Sınıf Türkçe Oyunları</title>
+<title>Hece Parkı — Okuyorum</title>
+<meta http-equiv="refresh" content="0; url=uygulama/index.html">
+<link rel="canonical" href="uygulama/index.html">
 <style>
-  :root{
-    --gok:#7ec8ff; --gok2:#a8e6ff;
-    --cimen:#7ed957; --cimen2:#5cb83a;
-    --kirmizi:#ff5f6d; --sari:#ffd93b; --yesil:#4bd37b; --mor:#a86bff; --turkuaz:#2ec4d6;
-    --koyu:#234d63;
-  }
-  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  html{scroll-behavior:smooth}
-  body{
-    font-family:var(--dik-temel,"Segoe UI",system-ui,-apple-system,"Noto Sans",sans-serif);
-    background:linear-gradient(180deg,var(--gok) 0%,var(--gok2) 45%,#d8f7c9 55%,var(--cimen) 100%);
-    min-height:100vh; color:var(--koyu); overflow-x:hidden;
-  }
-  /* Güneş ve bulutlar */
-  .sun{position:fixed;top:36px;right:44px;width:96px;height:96px;border-radius:50%;
-    background:radial-gradient(circle at 35% 35%,#fff59d,#ffd93b 60%,#ffb300);box-shadow:0 0 40px #ffd93b88;z-index:0;
-    animation:spin 24s linear infinite}
-  @keyframes spin{to{transform:rotate(360deg)}}
-  .cloud{position:fixed;background:#fff;border-radius:60px;opacity:.9;z-index:0;animation:yuru linear infinite}
-  .cloud::before,.cloud::after{content:"";position:absolute;background:#fff;border-radius:50%}
-  .cloud.c1{width:120px;height:44px;top:70px;left:-140px;animation-duration:60s}
-  .cloud.c1::before{width:60px;height:60px;top:-26px;left:18px}
-  .cloud.c1::after{width:44px;height:44px;top:-18px;left:64px}
-  .cloud.c2{width:90px;height:34px;top:150px;left:-120px;animation-duration:85s;transform:scale(.8)}
-  .cloud.c2::before{width:44px;height:44px;top:-20px;left:14px}
-  .cloud.c2::after{width:32px;height:32px;top:-14px;left:50px}
-  @keyframes yuru{to{transform:translateX(calc(100vw + 160px))}}
-
-  header{position:relative;z-index:2;text-align:center;padding:38px 16px 6px}
-  .logo{font-size:clamp(38px,7vw,64px);font-weight:800;color:#fff;
-    text-shadow:0 4px 0 #2a86b8,0 8px 18px rgba(0,0,0,.18);letter-spacing:1px}
-  .logo span{color:var(--sari)}
-  .slogan{font-size:clamp(16px,2.5vw,22px);color:#24506b;font-weight:600;background:#ffffffcc;
-    display:inline-block;padding:6px 22px;border-radius:999px;box-shadow:0 4px 0 rgba(0,0,0,.08);margin-top:10px}
-
-  main{position:relative;z-index:2;max-width:1100px;margin:0 auto;padding:30px 18px 70px}
-  .section-title{display:flex;align-items:center;gap:12px;justify-content:center;margin:8px 0 22px}
-  .section-title h2{font-size:clamp(22px,4vw,32px);color:#fff;text-shadow:0 3px 0 rgba(0,0,0,.15)}
-  .section-title .cizgi{height:6px;width:60px;border-radius:3px;background:#ffffffaa}
-
-  .kartlar{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:26px}
-  .oyun-karti{
-    background:#fff;border-radius:26px;overflow:hidden;cursor:pointer;position:relative;
-    box-shadow:0 10px 0 rgba(0,0,0,.12),0 18px 30px rgba(0,0,0,.15);
-    transition:transform .18s ease, box-shadow .18s ease; text-decoration:none; color:inherit;
-    display:flex;flex-direction:column}
-  .oyun-karti:hover{transform:translateY(-8px) rotate(-.5deg);box-shadow:0 14px 0 rgba(0,0,0,.12),0 26px 40px rgba(0,0,0,.2)}
-  .oyun-karti:active{transform:translateY(-2px)}
-  .oyun-karti:focus-visible{outline:4px solid #1b6ca8;outline-offset:4px}
-  .k-resim{height:170px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
-  .k-resim .gorsel{font-size:84px;filter:drop-shadow(0 6px 8px rgba(0,0,0,.25));transition:transform .25s}
-  .oyun-karti:hover .gorsel{transform:scale(1.15) rotate(-6deg)}
-  .k-roket{background:linear-gradient(160deg,#2a3d8f,#5a3fd6 60%,#a86bff)}
-  .k-canavar{background:linear-gradient(160deg,#ff9a3d,#ff5f6d 70%,#ffb347)}
-  .k-bayram{background:linear-gradient(160deg,#159c8a,#2ec4d6 65%,#7ee0e8)}
-  .k-uygulama{background:linear-gradient(160deg,#2f7d32,#5cb83a 70%,#a4e06a)}
-  .k-yakinda{background:linear-gradient(160deg,#6b8398,#9db4c4)}
-  .roket-yildiz{position:absolute;color:#fff;font-size:14px;opacity:.8;animation:paril 2.4s ease-in-out infinite}
-  @keyframes paril{0%,100%{opacity:.3;transform:scale(.7)}50%{opacity:1;transform:scale(1.2)}}
-  .k-etiket{position:absolute;top:14px;left:14px;background:#fff;border-radius:999px;padding:5px 14px;
-    font-weight:800;font-size:13px;color:#222;box-shadow:0 3px 0 rgba(0,0,0,.15)}
-  .k-alt{padding:18px 20px 22px;flex:1;display:flex;flex-direction:column;gap:8px}
-  .k-alt h3{font-size:22px;font-weight:800}
-  .k-alt p{font-size:15px;line-height:1.5;color:#456}
-  .k-ozellikler{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;list-style:none}
-  .ozellik{background:#e8f4ff;color:#256f9e;border-radius:999px;padding:4px 12px;font-size:12.5px;font-weight:700}
-  .k-alt .buton-yer{margin-top:auto;padding-top:10px}
-  .mini-buton{display:inline-flex;align-items:center;gap:8px;border:none;border-radius:14px;
-    padding:10px 20px;font-family:inherit;font-weight:800;font-size:16px;color:#fff;box-shadow:0 5px 0 rgba(0,0,0,.25)}
-  .b-roket{background:linear-gradient(180deg,#a86bff,#7d3ff0)}
-  .b-canavar{background:linear-gradient(180deg,#ff7a59,#f4436a)}
-  .b-bayram{background:linear-gradient(180deg,#37d3c4,#0e8f80)}
-  .b-uygulama{background:linear-gradient(180deg,#6cc94a,#2f7d32)}
-  .b-soluk{background:#9db4c4;color:#e9f2f7}
-
-  footer{position:relative;z-index:2;text-align:center;padding:26px 16px 34px;color:#1d4a33;font-weight:600}
-  footer .kalp{color:#f4436a}
-  footer .not{display:block;margin-top:6px;font-size:13px;font-weight:500;color:#2c5a44}
-  .zemin-cimleri{position:fixed;bottom:0;left:0;right:0;height:56px;z-index:1;pointer-events:none}
-  .cim{position:absolute;bottom:0;font-size:26px;opacity:.85}
-  @media (prefers-reduced-motion: reduce){
-    *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important}
-    .sun,.cloud,.roket-yildiz{animation:none !important}
-  }
+  :root{--koyu:#234d63;--yesil:#1f7a4d;--sari:#f4b400}
+  *{box-sizing:border-box}
+  html,body{min-height:100%}
+  body{margin:0;padding:24px;display:grid;place-items:center;font-family:var(--dik-temel,"TTKB Dik Temel Abece","Segoe UI",Verdana,sans-serif);color:var(--koyu);background:linear-gradient(180deg,#7ec8ff 0%,#a8e6ff 45%,#d8f7c9 55%,#7ed957 100%)}
+  main{width:min(560px,100%);padding:clamp(24px,5vw,40px);text-align:center;background:#fff;border-radius:28px;box-shadow:0 18px 40px rgba(20,60,90,.18)}
+  .simge{font-size:clamp(48px,10vw,72px);line-height:1}
+  h1{font-size:clamp(26px,6vw,40px);margin:10px 0 8px}
+  p{font-size:clamp(17px,2.6vw,20px);line-height:1.55;margin:0 auto 18px;max-width:40ch}
+  a{display:inline-block;padding:14px 26px;border-radius:999px;background:var(--yesil);color:#fff;text-decoration:none;font-weight:700;font-size:19px}
+  a:focus-visible{outline:4px solid var(--sari);outline-offset:4px}
 </style>
 </head>
 <body>
-  <div class="sun" aria-hidden="true"></div>
-  <div class="cloud c1" aria-hidden="true"></div>
-  <div class="cloud c2" aria-hidden="true"></div>
-  <div class="zemin-cimleri" aria-hidden="true">
-    <span class="cim" style="left:4%">🌱</span><span class="cim" style="left:16%">🌼</span>
-    <span class="cim" style="left:31%">🌿</span><span class="cim" style="left:47%">🌻</span>
-    <span class="cim" style="left:63%">🌱</span><span class="cim" style="left:76%">🌼</span>
-    <span class="cim" style="left:90%">🌿</span>
-  </div>
-
-  <header>
-    <div class="logo">🌱 Hece <span>Parkı</span> 🎢</div>
-    <div class="slogan">1. Sınıf Türkçe Oyun Bahçesi — reklamsız, dış istek yok</div>
-  </header>
-
   <main>
-    <div class="section-title">
-      <div class="cizgi" aria-hidden="true"></div><h2>🎡 Oyunlarımız</h2><div class="cizgi" aria-hidden="true"></div>
-    </div>
-
-    <div class="kartlar">
-      <a class="oyun-karti" href="okuma-bayrami-1-sinif.html">
-        <div class="k-resim k-bayram">
-          <span class="k-etiket">1. Sınıf · Okuma Bayramı</span>
-          <span class="roket-yildiz" style="top:26px;right:40px">✦</span>
-          <span class="roket-yildiz" style="bottom:34px;left:56px">✦</span>
-          <div class="gorsel">🎈</div>
-        </div>
-        <div class="k-alt">
-          <h3>Okuma Bayramı</h3>
-          <p>Dört oyun bir arada: uçan balonla okuma, iki kişilik tavşan yarışı, hafıza kartları ve cümle kurma. Öğretmen panelinden harf grubu, soru tipi ve sınıf listesi seçilir.</p>
-          <ul class="k-ozellikler">
-            <li class="ozellik">4 Oyun</li>
-            <li class="ozellik">Öğretmen Paneli</li>
-            <li class="ozellik">Sıradaki Öğrenci</li>
-          </ul>
-          <div class="buton-yer">
-            <span class="mini-buton b-bayram">🎈 Oyna</span>
-          </div>
-        </div>
-      </a>
-
-      <a class="oyun-karti" href="oyunlar/hece-rallisi/index.html">
-        <div class="k-resim k-roket">
-          <span class="k-etiket">1. Sınıf · İlk Okuma</span>
-          <span class="roket-yildiz" style="top:22px;left:30px">✦</span>
-          <span class="roket-yildiz" style="top:44px;right:36px">✦</span>
-          <span class="roket-yildiz" style="bottom:30px;left:60px">✦</span>
-          <div class="gorsel">🏎️</div>
-        </div>
-        <div class="k-alt">
-          <h3>Hece Rallisi</h3>
-          <p>Kapıya yaklaşırken bir harf ya da hece okunur. Duyduğun şeride geç, nitro topla; sınıf rekoru ve kendi rekorun iki hayalet araba olarak seninle yarışır.</p>
-          <ul class="k-ozellikler">
-            <li class="ozellik">Harf · Hece · Kelime</li>
-            <li class="ozellik">Nitro Serisi</li>
-            <li class="ozellik">Rekor Panosu</li>
-          </ul>
-          <div class="buton-yer">
-            <span class="mini-buton b-roket">🏎️ Oyna</span>
-          </div>
-        </div>
-      </a>
-
-      <a class="oyun-karti" href="oyunlar/ac-canavar/index.html">
-        <div class="k-resim k-canavar">
-          <span class="k-etiket">1. Sınıf · İlk Okuma</span>
-          <div class="gorsel">🍪</div>
-        </div>
-        <div class="k-alt">
-          <h3>Aç Canavar: Hece Lokmaları</h3>
-          <p>Piknikte kocaman ağzını açmış bir canavar bekliyor. Sesi dinle, doğru kurabiyeyi ağzına fırlat. Tek canavarla ya da iki canavar yarışıyla oyna.</p>
-          <ul class="k-ozellikler">
-            <li class="ozellik">Harf · Hece · Kelime</li>
-            <li class="ozellik">Tek / 2 Kişi</li>
-            <li class="ozellik">Yıldız Puanı</li>
-          </ul>
-          <div class="buton-yer">
-            <span class="mini-buton b-canavar">🍪 Oyna</span>
-          </div>
-        </div>
-      </a>
-
-      <a class="oyun-karti" href="uygulama/index.html">
-        <div class="k-resim k-uygulama">
-          <span class="k-etiket">Öğretmen · 18 Etkinlik</span>
-          <div class="gorsel">📚</div>
-        </div>
-        <div class="k-alt">
-          <h3>Öğretmen Uygulaması</h3>
-          <p>Harf tanımadan cümle kurmaya 18 etkinlik, çarkıfelek, kum havuzu ve yönetici paneli. Etkinlikler öğretilen harf grubuna göre kilitlenir.</p>
-          <ul class="k-ozellikler">
-            <li class="ozellik">18 Etkinlik</li>
-            <li class="ozellik">Aşama Kilidi</li>
-            <li class="ozellik">Çarkıfelek</li>
-          </ul>
-          <div class="buton-yer">
-            <span class="mini-buton b-uygulama">📚 Aç</span>
-          </div>
-        </div>
-      </a>
-
-      <div class="oyun-karti" style="opacity:.75;cursor:default">
-        <div class="k-resim k-yakinda">
-          <span class="k-etiket">Yakında!</span>
-          <div class="gorsel">🎈</div>
-        </div>
-        <div class="k-alt">
-          <h3>Harf Balonu 🎈</h3>
-          <p>Oyun parkına yeni oyunlar geliyor: balonlar, uçuşan harfler ve kısa kelimeler.</p>
-          <ul class="k-ozellikler">
-            <li class="ozellik">Yapım Aşamasında</li>
-          </ul>
-          <div class="buton-yer">
-            <span class="mini-buton b-soluk">Çok Yakında</span>
-          </div>
-        </div>
-      </div>
-    </div>
+    <div class="simge" aria-hidden="true">🎓</div>
+    <h1>Okuyorum’a yönlendiriliyorsunuz</h1>
+    <p>Hece Parkı’nın ana uygulaması öğretmen uygulamasıdır. Otomatik açılmazsa aşağıdaki bağlantıyı kullanın.</p>
+    <a href="uygulama/index.html">🎓 Okuyorum’u aç</a>
   </main>
-
-  <footer>
-    <p>Hece Parkı · Öğretmenler için ücretsiz · İyi eğlenceler <span class="kalp">♥</span></p>
-    <span class="not">Türkiye Yüzyılı Maarif Modeli 2026 harf sırası · Dış istek yok · Veriler bu cihazda · Yerel kurulumda çevrimdışı</span>
-  </footer>
+  <script>location.replace("uygulama/index.html");</script>
 </body>
 </html>

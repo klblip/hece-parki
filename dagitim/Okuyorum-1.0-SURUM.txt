@@ -1,0 +1,12 @@
+﻿Okuyorum - kurulum paketi (ogretmen etkinlik uygulamasi)
+Surum       : 1.0
+Tarih       : 2026-10-23
+Dosya sayisi: 16
+Acik boyut  : 0.21 MB
+Zip boyutu  : 0.07 MB
+SHA256      : B1A5003D0BD1C2780D0EE94F1CB321A4EFDCADE780171462DE6393B1DBFB27F4
+
+Kaynak testleri: 90/90 (test/test.html, yerel sunucu)
+Urunler: Hece Parki ana site (Okuyorum + iki oyun); Okuyorum ayri uygulama paketi.
+Gizlilik: paket icindeki GIZLILIK.md
+Bu paket ogretmen etkinlik uygulamasidir; Hece Parki ana paketi (HeceParki-*.zip) iki oyunu da icerir.

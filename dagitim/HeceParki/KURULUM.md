@@ -7,7 +7,7 @@ Bu klasör, 1. sınıf ilk okuma-yazma etkinliklerinin **çevrimdışı** kurulu
 
 1. Zip dosyasını açın ve `HeceParki` klasörünü **`C:\HeceParki`** gibi kısa bir yola
    çıkarın (Masaüstü veya Belgeler de olur).
-2. **`Sunucu-Baslat.cmd`** dosyasına çift tıklayın → oyun parkı
+2. **`Sunucu-Baslat.cmd`** dosyasına çift tıklayın → Okuyorum ana ekranı
    `http://localhost:8123/` adresinde açılır. (Hızlı önizleme için `Baslat.cmd` de
    kullanılabilir; ancak sayfalar arasında ortak `localStorage` ve mikrofon için
    `Sunucu-Baslat.cmd` önerilir.)
@@ -28,16 +28,15 @@ Bu klasör, 1. sınıf ilk okuma-yazma etkinliklerinin **çevrimdışı** kurulu
 
 | Yol | İçerik |
 |---|---|
-| `index.html` | Oyun parkı (4 giriş + yakında) |
-| `uygulama/` | Okuyorum: 18 etkinlik, öğretmen paneli, Fonem Stüdyo, çarkıfelek |
-| `okuma-bayrami-1-sinif.html` + `okuma-bayrami/` | Okuma Bayramı: 4 oyun + soru motoru |
+| `index.html` | Okuyorum ana ekranına yönlendirme |
+| `uygulama/` | Okuyorum: 18 etkinlik, öğretmen paneli, Fonem Stüdyo, çarkıfelek; ana ekranda iki oyun bağlantısı |
 | `oyunlar/hece-rallisi/` | Hece Rallisi |
 | `oyunlar/ac-canavar/` | Aç Canavar |
 | `assets/` | Kanonik veri, fonem sentezi, ortak oyun çekirdeği, font CSS'i |
 | `Baslat.cmd` | Hızlı önizleme (file://; sayfalar arası veri paylaşımı sınırlı) |
 | `Sunucu-Baslat.cmd` + `sunucu.ps1` | Önerilen: yalnız bu bilgisayarda yerel HTTP sunucusu (localStorage + mikrofon) |
 | `README.md`, `OGRETMEN-BASLANGIC.md`, `GIZLILIK.md` | Tanıtım, 10 dakikalık başlangıç, gizlilik |
-| `uygulama/KULLANIM.md`, `okuma-bayrami/KULLANIM.md` | Ayrıntılı kullanım |
+| `uygulama/KULLANIM.md` | Ayrıntılı kullanım |
 
 **Pakette yoktur:** testler (`test/`), araştırma raporları (`arastirma/`), geliştirici
 notları (`AGENTS.md`, `TASKS.md`), ekran görüntüleri ve TTKB font dosyası. `README.md`
@@ -97,8 +96,8 @@ bilgisi: `assets/fonts/README.md`.
 
 ## İlk açılışta kontrol listesi
 
-- [ ] `index.html` açılıyor, 4 kart + 1 "Yakında" görünüyor.
-- [ ] Okuyorum ana ekranı ve 18 etkinlik kartı görünüyor.
+- [ ] `index.html` açılıyor, Okuyorum ana ekranına yönleniyor.
+- [ ] Okuyorum ana ekranında 18 etkinlik ve **Oyunlar** bölümünde 2 oyun kartı görünüyor.
 - [ ] Hece Rallisi ile Aç Canavar'da 29 harf çipi listeleniyor.
 - [ ] Ses duyuluyor; sessiz harfte "te" değil kısa ses çıkıyor.
 - [ ] TTKB fontu kuruluysa yazı tipi dik temel; değilse okunaklı sistem fontu.

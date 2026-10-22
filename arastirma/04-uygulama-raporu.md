@@ -1,6 +1,6 @@
 # Aşama 4 — Uygulama ve Doğrulama Raporu
 
-**Tarih:** 21.10.2026
+**Tarih:** 21.10.2026 (güncelleme: 23.10.2026)
 **Kapsam:** Onaylanan P0 + P1 maddeleri (kararlar: `TASKS.md`)
 **Dayanak:** TYMM 2026 İlkokul Türkçe Dersi Öğretim Programı, `AGENTS.md` kuralları,
 Aşama 1-3 raporları (`arastirma/00-ILK-RAPOR.md` … `03-pedagojik-cerceve-ve-mufredat.md`).
@@ -8,12 +8,18 @@ Aşama 1-3 raporları (`arastirma/00-ILK-RAPOR.md` … `03-pedagojik-cerceve-ve-
 Bu rapor **doğrudan gözlem**, **kaynak bilgisi**, **uzman yorumu** ve **test edilmemiş
 varsayım** ayrımını korur. Her iddia için kanıt türü belirtilmiştir.
 
+> **23.10.2026 güncellemesi:** Ana site artık Okuyorum'dur; kök `index.html` bu
+> uygulamaya yönlendirir. Hece Rallisi ve Aç Canavar, Okuyorum ana ekranındaki
+> **Oyunlar** bölümünden açılır. Okuma Bayramı web/paket dışı arşive alındı.
+> Test paketi **90/90** geçer. Aşağıdaki 21.10.2026 bölümleri, aksi belirtilmedikçe
+> tarihsel uygulama kaydını anlatır.
+
 ---
 
 ## 1. Yönetici özeti
 
-- Dört giriş noktası da (Okuyorum, Okuma Bayramı, Hece Rallisi, Aç Canavar) tek bir
-  kanonik veri kaynağına (`assets/veri.js`) bağlandı.
+- Yayınlanan üç giriş noktası (Okuyorum, Hece Rallisi, Aç Canavar) tek bir
+  kanonik veri kaynağına (`assets/veri.js`) bağlandı; Okuma Bayramı arşivde.
 - Harf sırası, heceleme ve harf kümesi kuralları tek yerde; dört uygulama aynı sonucu
   üretiyor (doğrudan gözlem + otomatik test).
 - `okuma-bayrami` tek dosyadan **7 modüle** ayrıldı; davranış korunarak test edildi.
@@ -21,8 +27,8 @@ varsayım** ayrımını korur. Her iddia için kanıt türü belirtilmiştir.
 - Yazı tipi: TTKB Dik Temel Abece, **kopyalanmadan** `local()` ile; beş girişte etkin.
 - Erişilebilirlik: `aria-live`, `focus-visible`, `aria-label`, `prefers-reduced-motion`,
   yakınlaştırmanın açılması.
-- Tarayıcı test paketi: **89/89 geçti** (9 kanonik veri, 17 heceleme, 3 adaptör,
-  14 havuz/soru, 5 fonem, 8 içerik lint'i, 15 gerçek sayfa yükleme, 5 çevrimdışılık,
+- Tarayıcı test paketi: **90/90 geçti** (9 kanonik veri, 17 heceleme, 3 adaptör,
+  14 havuz/soru, 5 fonem, 8 içerik lint'i, 16 gerçek sayfa yükleme, 5 çevrimdışılık,
   5 Hece Fabrikası).
 - İki oyunun ortak yardımcıları tek çekirdekte (`assets/oyun-cekirdek.js`); oyun
   akışları ayrı kaldı.
@@ -46,14 +52,14 @@ varsayım** ayrımını korur. Her iddia için kanıt türü belirtilmiştir.
 | `okuma-bayrami/js/soru.js` | Durum, havuzlar, 6 soru tipi | Tek dosyadaki soru motorunu ayrıştırmak |
 | `okuma-bayrami/js/ses.js` | TTS, fonem, efekt, konfeti, toast | Ses katmanını oyundan ayırmak |
 | `okuma-bayrami/js/oyun.js` | 4 oyun, panel, kura, puanlar | Oyun katmanı |
-| `test/test.html` | 89 tarayıcı testi | P0/P1/P2/P3 doğrulaması |
+| `test/test.html` | 90 tarayıcı testi | P0/P1/P2/P3 doğrulaması |
 | `okuma-bayrami/KULLANIM.md` | Oyun ve panel kılavuzu | Öğretmenin kullanabilmesi |
 | `OGRETMEN-BASLANGIC.md` | 10 dakikalık kurulum, ses kontrolü, 15 dakikalık ders akışı, sorun giderme | İlk kullanım eşiğini düşürmek (P2-5) |
 | `GIZLILIK.md` | Yerel veri envanteri, mikrofon, silme adımları, KVKK sınırı | Şeffaflık ve okul politikasına uyum (P2-6) |
 | `KURULUM.md` | Kopyala-çalıştır kurulum, kısayol, mikrofon, güncelleme/geri alma, sorun giderme | Okul cihazında kurulum (P3) |
 | `Baslat.cmd`, `Sunucu-Baslat.cmd`, `sunucu.ps1` | Tarayıcıyla açılış + yalnız `localhost:8123` yerel sunucu | Mikrofon için güvenli bağlam; ağa açılmaz |
 | `araclar/paket-olustur.ps1` | `dagitim/HeceParki-1.0.zip` + SHA256 sürüm notu üretir | Tekrarlanabilir dağıtım |
-| `404.html`, `WEB-YAYIN.md`, `araclar/web-olustur.ps1` | Statik site: hata sayfası, yayın kılavuzu, 29 dosyalık web paketi | Sunucusuz HTML sitesi (P3-5) |
+| `404.html`, `WEB-YAYIN.md`, `araclar/web-olustur.ps1` | Statik site: hata sayfası, yayın kılavuzu, 21 dosyalık web paketi | Sunucusuz HTML sitesi (P3-5) |
 
 ### 2.2 Yeniden yazılan / düzenlenen dosyalar
 
@@ -68,8 +74,8 @@ varsayım** ayrımını korur. Her iddia için kanıt türü belirtilmiştir.
 | `uygulama/css/stil.css` | Font değişkeni, odak ve hareket azaltma |
 | `oyunlar/hece-rallisi/index.html` | Kanonik veri, 5 resmî ön ayar, gerçek hece havuzu, küçük harf, TTKB fontu, zoom; ortak yardımcılar çekirdeğe taşındı |
 | `oyunlar/ac-canavar/index.html` | Aynı düzeltmeler + çeldirici üretim hatası; ortak yardımcılar çekirdeğe taşındı |
-| `index.html` | Dengeli işaretleme, 4 gerçek kart + 1 "Yakında", 18 etkinlik metni, dış bağlantı yok |
-| `README.md` | Dört giriş, resmî gruplar, ses/font/erişilebilirlik, sınırlamalar |
+| `index.html` | Okuyorum'a yönlendirme; iki oyun Okuyorum ana ekranında, Okuma Bayramı yayın dışı |
+| `README.md` | Üç giriş, resmî gruplar, ses/font/erişilebilirlik, sınırlamalar |
 | `uygulama/KULLANIM.md` | Fontun gömülü olmadığı, yedek içerik olmadığı, sunucu yolu düzeltildi |
 | `TASKS.md` | P0/P1 durumları + test günlüğü |
 
@@ -97,7 +103,7 @@ varsayım** ayrımını korur. Her iddia için kanıt türü belirtilmiştir.
 ### 3.1 Otomatik testler — `test/test.html`
 
 Çalıştırma: yerel sunucu (`http://localhost:8124/test/test.html`), Chrome/Edge.
-Sonuç: **89/89 geçti**, konsol hatası yok.
+Sonuç: **90/90 geçti**, konsol hatası yok.
 
 | Bölüm | Test | Ne doğrulanıyor |
 |---|---|---|
@@ -107,7 +113,7 @@ Sonuç: **89/89 geçti**, konsol hatası yok.
 | 4 · Havuz/soru | 14 | Grup 1'de 20+ kelime, cümle kapısı, hece havuzu gerçek kelimelerden, `qIlkses` yazı sızdırmıyor, `qHarf` sessiz, `qEksik` ilk harf + tekrar, 300 soruda tip/indeks, tek doğru cevap, grup 1 harf sınırı, resim=kelime, resim tekrarı yok |
 | 5 · Fonem | 5 | Ünlü/sessiz ayrımı, 3 sessiz sentezi, ünlünün sentezlenmemesi, manifest yol yapısı |
 | 6 · İçerik lint'i | 8 | Kelime/cümle tekrarı, ilk okunabildiği grup ataması, 10 harf sınırı, cümle uzunluğu, rakam/yabancı harf, `heceler` tutarlılığı |
-| 7 · Sayfa yükleme | 15 | İki oyunda resmî ön ayarlar, 29 çip, küçük harf, gerçek heceler, TTKB fontu, zoom, **ortak çekirdek fonksiyonları**; `okuma-bayrami` modülleri, fonem, cümle kapısı, hafıza destesi, panel kapsama özeti, yedek yükleme doğrulaması |
+| 7 · Sayfa yükleme | 16 | İki oyunda resmî ön ayarlar, 29 çip, küçük harf, gerçek heceler, TTKB fontu, zoom, **ortak çekirdek fonksiyonları**; Okuyorum ana ekranında iki oyun bağlantısı; `okuma-bayrami` modülleri, fonem, cümle kapısı, hafıza destesi, panel kapsama özeti, yedek yükleme doğrulaması |
 | 8 · Çevrimdışılık | 5 | Kök `index.html`, Okuyorum, Okuma Bayramı ve iki oyunda `src`/`href`/CSS `url()`/`performance` kaynaklarında dış `http(s)` isteği yok |
 
 Testler `iframe` ile **gerçek sayfaları** yükler; yani "modül yüklendi mi", "preset
@@ -115,7 +121,7 @@ gerçekten 1. grup mu", "oyun içi hece uydurma mı" soruları tarayıcıda öl�
 
 ### 3.2 Elle yapılan kontroller (doğrudan gözlem)
 
-- Kök `index.html`: 4 kart + 1 "Yakında"; kart hedefleri HTTP 200; harici istek yok.
+- Kök `index.html`: Okuyorum'a yönlendirme; iki oyun ana ekranda; harici istek yok.
 - `okuma-bayrami`: 29 harf, grup 1'de 27 kelime / 20 resimli kelime / 24 hece;
   `hecele("aile") = a-i-le`; `cumlelerAcik()` grup 1'de `false`.
 - `uygulama`: ana ekranda 6 grup kartı (5 resmî + TÜM SESLER), TTKB fontu hesaplanmış.
@@ -159,7 +165,7 @@ gerçekten 1. grup mu", "oyun içi hece uydurma mı" soruları tarayıcıda öl�
 | 11. Çevrimdışı | ✅ | Dış `src`/`href` yok; font `local()`, ses sentezi/TTS |
 | 12. Telif | ✅ | Rakip kod/görsel/ses/metin kopyalanmadı; yalnız ilke |
 | 13. Font lisansı | ✅ | Font dosyası depoda yok; `local()` + yedek yığın |
-| 14. Test zorunluluğu | ✅ | 89 test; P0/P1/P2/P3 değişiklikleri kapsandı |
+| 14. Test zorunluluğu | ✅ | 90 test; P0/P1/P2/P3 değişiklikleri kapsandı |
 | 15. Kapsam disiplini | ✅ | Yeni oyun/etkinlik eklenmedi |
 
 ---
@@ -184,31 +190,32 @@ oyunlarda eski `Comic Sans MS` yığını yedek olarak korunmuştur.
 - Tüm eylemler gerçek `<button>`; `Tab`/`Enter`/`Space` çalışır.
 - `:focus-visible` belirgin çerçeve; `prefers-reduced-motion` animasyonları kısar.
 - Soru ve bildirim metinleri `aria-live` ile duyurulur.
-- Viewport'ta `user-scalable=no` / `maximum-scale=1` **kaldırıldı** (dört girişte).
+- Viewport'ta `user-scalable=no` / `maximum-scale=1` **kaldırıldı** (üç girişte).
 - Renk tek başına anlam taşımaz: ✓, ses ve metin geri bildirimi birlikte.
 
 ### Kurulum paketi (P3)
 
 `araclar/paket-olustur.ps1` yalnız çalışma zamanı dosyalarını toplar:
-**32 dosya, 0,14 MB zip**. `test/`, `arastirma/`, `AGENTS.md`, `TASKS.md`, ekran
+**24 dosya, 0,11 MB zip**. `test/`, `arastirma/`, `AGENTS.md`, `TASKS.md`, ekran
 görüntüleri, geliştirme sunucusu ve TTKB font dosyası pakete girmez. Paket:
 `dagitim/HeceParki-1.0.zip` + SHA256 sürüm notu.
 
 - `Baslat.cmd` → `index.html` (varsayılan tarayıcı).
 - `Sunucu-Baslat.cmd` → `sunucu.ps1`, yalnız `http://localhost:8123/`; dizin dışına
   çıkış denemesi 403 döner.
-- Duman testi: zip bütünlüğü (32/32 dosya hash eşleşmesi), HTTP 200 (kök, 4 uygulama,
-  çekirdek), `file://` render (5 kart; iki oyunda 29 çip; kapsama 5 satır), traversal 403.
+- Duman testi: zip bütünlüğü (24/24 dosya hash eşleşmesi), HTTP 200 (kök, Okuyorum,
+  iki oyun, çekirdek), `file://` render (Okuyorum ana ekranı; iki oyunda 29 çip;
+  kapsama 5 satır), traversal 403.
 
 ### Statik web sitesi (P3-5)
 
-`araclar/web-olustur.ps1` aynı çalışma zamanı dosyalarından **29 dosyalık** saf
+`araclar/web-olustur.ps1` aynı çalışma zamanı dosyalarından **21 dosyalık** saf
 HTML/CSS/JS site üretir: `dagitim/HeceParki-Web/` + `HeceParki-Web-1.0.zip`.
 `.cmd`/`.ps1`, `test/`, `arastirma/`, ekran görüntüleri ve font dosyası yoktur.
-Kök `index.html` artık `assets/font.css` yükler ve TTKB `local()` yazı tipini kullanır.
+Kök `index.html` Okuyorum'a yönlendirir; uygulama ve iki oyun aynı kökenden çalışır.
 
-- Alt klasörde (GitHub Pages benzeri) HTTP testi: ana sayfa 5 kart, Okuyorum,
-  Okuma Bayramı 5 kapsama satırı, iki oyunda 29 çip, `404.html`; konsol hatası yok.
+- Alt klasörde (GitHub Pages benzeri) HTTP testi: Okuyorum ana ekranı + iki oyun kartı,
+  iki oyunda 29 çip, `404.html`; konsol hatası yok.
 - Bağlantı denetimi: kök-adlı (`/...`) bağlantı yok, tüm yerel `href/src` hedefleri var.
 - Dış alan adı taraması: çalışma zamanı dosyalarında dış istek yok.
 - Mikrofon için HTTPS/localhost; font yalnız kurulu cihazlarda TTKB, diğerlerinde
@@ -263,10 +270,11 @@ kaynak olduğu için içerik geri alımı tüm uygulamaları birlikte etkiler (b
 ## 8. Sonuç
 
 P0 ve P1'in tamamı ile P2'nin konsolidasyon, onboarding ve gizlilik maddeleri
-tamamlandı; dört uygulama aynı müfredat kurallarıyla çalışıyor ve bunu **89 otomatik
-test** doğruluyor. Çevrimdışı kurulum paketi (`dagitim/HeceParki-1.0.zip`, 32 dosya)
-ve sunucusuz statik web sitesi (`dagitim/HeceParki-Web/`, 29 dosya) üretildi; zip
-bütünlüğü, HTTP/alt klasör, bağlantı denetimi ve `file://` render duman testlerinden
-geçti. Kalan işler yeni özellik değil, **saha kurulumu ve içerik kaydı**dır: akıllı
-tahtada gerçek kurulum turu, stüdyo kalitesinde ses kayıtları ve `file://` altında
-ses/mikrofon/kalıcılık doğrulaması.
+tamamlandı; Okuyorum ana site, Hece Rallisi ve Aç Canavar entegre; aynı müfredat
+kurallarıyla çalışıyor ve bunu **90 otomatik test** doğruluyor. Çevrimdışı kurulum
+paketi (`dagitim/HeceParki-1.0.zip`, 24 dosya) ve sunucusuz statik web sitesi
+(`dagitim/HeceParki-Web/`, 21 dosya) üretildi; zip bütünlüğü, HTTP/alt klasör,
+bağlantı denetimi ve `file://` render duman testlerinden geçti. Kalan işler yeni
+özellik değil, **saha kurulumu ve içerik kaydı**dır: akıllı tahtada gerçek kurulum
+turu, stüdyo kalitesinde ses kayıtları ve `file://` altında ses/mikrofon/kalıcılık
+doğrulaması.

@@ -1,4 +1,4 @@
-# TASKS — Okuyorum / Hece Parkı / Okuma Bayramı
+# TASKS — Okuyorum / Hece Parkı
 
 > Bu dosya Aşama 4 (uygulama) görev listesidir. Aşama 1-4 raporları `arastirma/` altındadır.
 > Kural: P0 bitmeden yeni oyun/etkinlik eklenmez. Her görev tamamlandığında test sonucu buraya yazılır.
@@ -35,11 +35,11 @@
 - [x] P1-2 Kayıtlı fonem/hece seti altyapısı (manifest + yükleyici + yol doğrulama testi); kayıt dosyaları sonra eklenecek
 - [x] P1-3 Kapalı → açık hece sırası; hece havuzu yalnız gerçek kelime hecelerinden
 - [x] P1-4 Küçük harf önce: öğretim ekranlarında ve oyunlarda küçük harf birincil
-- [x] P1-5 TTKB Dik Temel Abece fontu, yerel, dört girişte de etkin; Türkçe glif testi
+- [x] P1-5 TTKB Dik Temel Abece fontu, yerel, üç girişte de etkin; Türkçe glif testi
 - [x] P1-6 İçerik lint'i: harf kümesi, grup ataması, hece tutarlılığı, emoji ve resim-kelime eşliği, kelime/cümle tekrarı, cümle uzunluğu ve alfabe denetimi (8 test); cümle doğallığı insan denetiminde
 - [x] P1-7 Öğretmen paneli: kapsama özeti (5 grup) + JSON dışa/içe aktarma, doğrulamalı; `uygulama`da kapsama + dışa aktarma zaten vardı
-- [x] P1-8 Responsive/mobil: dört girişte de yakınlaştırma açık, dikeyde çalışır (gerçek cihaz testi yok)
-- [x] P1-9 Tarayıcı içi test altyapısı (`test/`): 89 test
+- [x] P1-8 Responsive/mobil: üç girişte de yakınlaştırma açık, dikeyde çalışır (gerçek cihaz testi yok)
+- [x] P1-9 Tarayıcı içi test altyapısı (`test/`): 90 test
 
 ## P2 — Konsolidasyon (kısmen tamamlandı)
 
@@ -47,7 +47,7 @@
 - [x] P2-2 `oyunlar` oyunlarını çekirdeğe bağla: iki motor da `veri.js` → `fonem.js` → `oyun-cekirdek.js` sırasıyla yükleniyor
 - [x] P2-3 `okuma-bayrami` verisini çekirdeğe bağla (modül ayrımı + `OrtakVeri` adaptörü yapıldı)
 - [x] P2-8 Kullanılmayan `assets/ortak.js` kaldırıldı (0 referans)
-- [ ] P2-4 Akıllı tahta/touch testi — `file://` temel açılış headless Chrome'da doğrulandı (kök 5 kart, iki oyunda 29 çip); ses/mikrofon/kalıcılık denenmedi
+- [ ] P2-4 Akıllı tahta/touch testi — `file://` temel açılış headless Chrome'da doğrulandı (Okuyorum ana ekranı + iki oyun, 29 çip); ses/mikrofon/kalıcılık denenmedi
 - [x] P2-5 Öğretmen onboarding: `OGRETMEN-BASLANGIC.md` (10 dk kurulum, ders akışı, sorun giderme)
 - [x] P2-6 Gizlilik/veri notu: `GIZLILIK.md` (yerel saklama, mikrofon, silme, KVKK sınırı)
 - [x] P2-7 README/KULLANIM güncelle
@@ -57,9 +57,9 @@
 - [x] P3-1 Kurulum paketi üreticisi: `araclar/paket-olustur.ps1` → `dagitim/HeceParki-1.0.zip` + SHA256 sürüm notu
 - [x] P3-2 Başlatıcılar: `Baslat.cmd`, `Sunucu-Baslat.cmd`, `sunucu.ps1` (yalnız `localhost:8123`, dizin dışına çıkış 403)
 - [x] P3-3 `KURULUM.md`: kopyala-çalıştır, kısayol, mikrofon, güncelleme/geri alma, sorun giderme
-- [x] P3-4 Paket duman testi: 32 dosya, zip bütünlüğü, HTTP 200, `file://` render (5 kart, 29 çip), traversal 403
-- [x] P3-5 Statik web sitesi: `araclar/web-olustur.ps1` → `dagitim/HeceParki-Web/` (29 dosya, `.cmd`/`.ps1` yok) + zip
-- [x] P3-6 Web sitesi testi: alt klasör HTTP 200, 5 kart, 29 çip, 5 kapsama satırı, 404, bağlantı denetimi, konsol temiz
+- [x] P3-4 Paket duman testi: 24 dosya, zip bütünlüğü, HTTP 200, `file://` render (Okuyorum + iki oyun, 29 çip), traversal 403
+- [x] P3-5 Statik web sitesi: `araclar/web-olustur.ps1` → `dagitim/HeceParki-Web/` (21 dosya, `.cmd`/`.ps1` yok) + zip
+- [x] P3-6 Web sitesi testi: alt klasör HTTP 200, Okuyorum + iki oyun, 29 çip, 5 kapsama satırı, 404, bağlantı denetimi, konsol temiz
 - [ ] P3-7 Akıllı tahtada gerçek kurulum turu (P2-4 ile birlikte)
 - [ ] P3-8 Tek tık kurulum (isteğe bağlı: imzalı MSIX/exe)
 
@@ -80,4 +80,5 @@
 | 22.10.2026 | `test/test.html` güncel koşu | ✅ 89/89 | Hece Fabrikası + Roket + sınıf puan tablosu testleri dahil; konsol hatası yok |
 | 22.10.2026 | localStorage kalıcılığı | ✅ | HTTP sitesinde yaz → yenile → başka sayfa oku; anahtarlar `okuyorum_v1`, `okuma_bayrami_v1`, oyun/rekor/fonem |
 | 22.10.2026 | GitHub Pages yayını | ✅ | https://klblip.github.io/hece-parki/ — `main`/`docs`; 18 etkinlik, 5 kart, 29 çip, 404, localStorage |
+| 23.10.2026 | Ana site = Okuyorum; iki oyun entegrasyonu | ✅ 90/90 | Kök yönlendirme; Okuyorum ana ekranında Hece Rallisi + Aç Canavar; Okuma Bayramı web/paket dışı; 21 web / 24 paket dosyası |
 | 21.10.2026 | Kök `index.html` kartları | ✅ 4/4 HTTP 200 | Dış bağlantı yok |

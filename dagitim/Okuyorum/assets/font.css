@@ -1,0 +1,21 @@
+/* TTKB Dik Temel Abece — yerel kurulum için.
+   Telif: Prof. Namık Kemal Sarıkavak / TTKB. Bu dosya fontu DAĞITMAZ;
+   yalnızca kullanıcının cihazında kurulu fontu `local()` ile seçer.
+   Font kurulu değilse sistem sans-serif fontuna düşer. */
+@font-face{
+  font-family:"TTKB Dik Temel Abece";
+  src:local("TTKB Dik Temel Abece Body"),local("TTKB Dik Temel Abece");
+  font-weight:400;
+  font-style:normal;
+  font-display:swap;
+}
+@font-face{
+  font-family:"TTKB Dik Temel Abece";
+  src:local("TTKB Dik Temel Abece"),local("TTKB Dik Temel Abece Bold");
+  font-weight:600 900;
+  font-style:normal;
+  font-display:swap;
+}
+:root{
+  --dik-temel:"TTKB Dik Temel Abece","Segoe UI",system-ui,-apple-system,"Noto Sans",sans-serif;
+}

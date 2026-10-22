@@ -2,10 +2,10 @@
 
 ## Amaç
 1. sınıf Türkçe ilk okuma-yazma için çevrimdışı, reklamsız, dokunmatik uyumlu etkinlikler geliştirmek.
-Üç sistem vardır:
-- `uygulama/` — 18 etkinlik + öğretmen paneli + çarkıfelek
-- `oyunlar/` — `hece-rallisi`, `ac-canavar`
-- `okuma-bayrami-1-sinif.html` — 4 oyun + soru motoru (modüllere ayrıldı)
+İki yayın sistemi ve bir arşiv vardır:
+- `uygulama/` — ana site: 18 etkinlik + öğretmen paneli + çarkıfelek
+- `oyunlar/` — Okuyorum ana ekranındaki **Oyunlar** bölümünden açılan `hece-rallisi`, `ac-canavar`
+- `okuma-bayrami-1-sinif.html` — yayın dışı arşiv (web/paket dışı)
 
 ## Değişmez kurallar
 1. **Müfredat:** Türkiye Yüzyılı Maarif Modeli 2026 İlkokul Türkçe Dersi Öğretim Programı (1-4) esas alınır.
@@ -39,7 +39,7 @@ araclar/
   paket-olustur.ps1  kurulum paketi üretir (dagitim/HeceParki-*.zip)
   web-olustur.ps1    statik web sitesi üretir (dagitim/HeceParki-Web/)
 dagitim/           üretilen kurulum/web paketi (kaynak değil)
-index.html         oyun parkı (TTKB local font)
+index.html         Okuyorum'a yönlendirme (ana giriş; TTKB local font)
 404.html           web sitesi hata sayfası
 WEB-YAYIN.md       web yayınlama kılavuzu
 okuma-bayrami/

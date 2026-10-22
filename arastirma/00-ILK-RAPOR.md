@@ -7,7 +7,7 @@
 - `arastirma/01-proje-envanteri.md` — dosya/kod envanteri, hatalar, erişilebilirlik, tekrar analizi
 - `arastirma/02-piyasa-arastirmasi.md` — Dersekranda, Ramazan Öğretmen, pazar boşlukları
 - `arastirma/03-pedagojik-cerceve-ve-mufredat.md` — 2026 programı, kanıt tabanı, uyum matrisi, çerçeve
-- `arastirma/04-uygulama-raporu.md` - P0+P1 uygulaması, değişen dosyalar, 89 test sonucu, açık işler
+- `arastirma/04-uygulama-raporu.md` - P0+P1 uygulaması, değişen dosyalar, 90 test sonucu, açık işler
 
 ---
 
