@@ -18,7 +18,7 @@ Aşağıdaki yollardan biri:
 
 ## Ekran akışı
 
-1. **Ana ekran** — Tavşan-puan pisti ve ses grubu kartları.
+1. **Ana ekran** — ⭐ puan çipi ve ses grubu kartları.
 2. **Grup ekranı** — üstte hızlı grup geçişi (ANETİL · OKURIM · ÜSÖYDZ · ÇBGCŞ · PHVĞFJ · TÜM SESLER),
    ortada o grubun harf kutuları (basınca harf söylenir), altta etkinlik kartları.
 3. **Etkinlik ekranı** — üstte sesli talimat çipi (basınca tekrar okur), ortada büyük dokunmatik tuşlar.

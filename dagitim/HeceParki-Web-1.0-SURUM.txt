@@ -2,9 +2,9 @@
 Surum       : 1.0
 Tarih       : 2026-10-22
 Dosya sayisi: 29
-Acik boyut  : 0.42 MB
+Acik boyut  : 0.43 MB
 Zip boyutu  : 0.14 MB
-SHA256      : AEED5CFA3EE232664F5BC4F6D48A1AB1647D8E008BCDCD0970FB5C6BDC9783D2
+SHA256      : 8071B8E9A5B9BF0B5CDFCD310164883B9BB0962AFA55A6276FBD40A892386554
 Baglanti    : 38 yerel baglanti denetlendi
 
 Kaynak testleri: 86/86 (test/test.html, yerel sunucu)

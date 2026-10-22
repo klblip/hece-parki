@@ -4,6 +4,15 @@ Hece Parkı saf **HTML + CSS + JavaScript** sitesidir. Sunucu tarafı kod, verit
 reklam, analitik ve dış istek yoktur. Site klasörünü herhangi bir statik barındırma
 hizmetine veya okul web sunucusuna yükleyebilirsiniz.
 
+## Bu projenin canlı yayını
+
+- **Site:** https://klblip.github.io/hece-parki/
+- **Depo:** https://github.com/klblip/hece-parki
+- **Kaynak:** `main` dalı, `/docs` klasörü (GitHub Pages).
+- Güncelleme: `dagitim/HeceParki-Web` içeriğini `docs/` altına kopyalayın,
+  `docs/.nojekyll` dosyasını koruyun ve `git push` yapın. Pages birkaç dakika içinde
+  yeniden yayınlanır.
+
 ## Yayına hazır klasör
 
 - **`dagitim/HeceParki-Web/`** — doğrudan yüklenebilir site

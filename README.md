@@ -5,6 +5,15 @@ göre hazırlanmış, **çevrimdışı** çalışan, reklamsız ve dokunmatik uy
 okuma-yazma etkinlikleri. Dış istek yoktur: yazı tipi, ses ve görseller yerel
 dosyalardan gelir.
 
+## Canlı site
+
+- **Yayın adresi:** https://klblip.github.io/hece-parki/
+- **GitHub deposu:** https://github.com/klblip/hece-parki
+- GitHub Pages kaynağı: `main` dalındaki **`docs/`** klasörü.
+- `docs/`, `dagitim/HeceParki-Web/` klasörünün yayın kopyasıdır. Siteyi
+  güncelledikten sonra `dagitim/HeceParki-Web` içeriğini `docs/` altına kopyalayıp
+  `git push` yapın.
+
 ## Nasıl açılır?
 
 1. `index.html` dosyasına **çift tıkla** → oyun parkı açılır.

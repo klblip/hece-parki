@@ -67,12 +67,14 @@ const uS=document.getElementById("btnSes");
 const uY=document.getElementById("btnYonet");
 const uO=document.getElementById("btnOgr");
 const uOF=document.getElementById("btnOgrFab");
+const uT=document.getElementById("btnTablo");
 const uP=document.getElementById("puanChip");
 uE.addEventListener("click",()=>{ konusDur(); anaEkran(); });
 uM.addEventListener("click",()=>{ konusDur(); if(durum.akt){ durum.akt=null; gitGrup(durum.grup); } else anaEkran(); });
 uY.addEventListener("click",()=>{ zamanlukTemizle(); durum.akt=null; yoneticiEkran(); });
 uO.addEventListener("click",()=>{ SES.tus(); carkiAc(); });
 uOF.addEventListener("click",()=>{ SES.tus(); carkiAc(); });
+uT.addEventListener("click",()=>{ puanTablosuAc(); });
 uS.addEventListener("click",()=>{
   OYUNSES.acik=!OYUNSES.acik;
   uS.textContent=OYUNSES.acik?"🔊":"🔇";
@@ -881,6 +883,7 @@ function oHeceBina(alan,g){
     kayit.fabrikaYarisSkor.sort((x,y)=>y.puan-x.puan);
     kayit.fabrikaYarisSkor=kayit.fabrikaYarisSkor.slice(0,10);
     kayitYaz();
+    sinifSkorEkle(list,"clsSonFabrika");
   }
   function oyuncuSecici(){
     alan.innerHTML="";
@@ -1997,6 +2000,7 @@ function oHafiza(alan, g){
     kayit.hafizaSkor.sort((x,y)=>y.puan-x.puan);
     kayit.hafizaSkor=kayit.hafizaSkor.slice(0,10);
     kayitYaz();
+    sinifSkorEkle(list,"clsSonHafiza");
   }
   function yenileLiderTablo(kap){
     const skor=(kayit.hafizaSkor||[]).slice(0,5);
@@ -2292,6 +2296,7 @@ function oRoketYarisi(alan, g){
     kayit.roketSkor.sort((x,y)=>y.puan-x.puan);
     kayit.roketSkor=kayit.roketSkor.slice(0,10);
     kayitYaz();
+    sinifSkorEkle(list,"clsSonRoket");
   }
 
   /* --- oyuncu seçici (isimler öğrenci listesinden — yazma kutusu yok) --- */
@@ -2481,4 +2486,100 @@ function oRoketYarisi(alan, g){
   }
 
   oyuncuSecici();
+}
+
+/* ======== 20. SINIF PUAN TABLOSU (sınıf listesine bağlı · haftalık şampiyon) ======== */
+function sinifHafta(){
+  const d=new Date();
+  const t=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));
+  const gun=(t.getUTCDay()+6)%7;            /* pazartesi = 0 */
+  t.setUTCDate(t.getUTCDate()-gun+3);       /* bu haftanın çarşambası */
+  const birinci=new Date(Date.UTC(t.getUTCFullYear(),0,4));
+  const no=1+Math.round((((t-birinci)/86400000)-3+((birinci.getUTCDay()+6)%7))/7);
+  return t.getUTCFullYear()+"-H"+String(no).padStart(2,"0");
+}
+/* hafta döndüyse: eski tabloyu arşive al (ilk 3 şampiyon), sıfırla */
+function haftaKontrol(){
+  const h=sinifHafta();
+  if(kayit.clsHafta!==h){
+    if(kayit.clsHafta&&kayit.clsSkor&&Object.keys(kayit.clsSkor).length){
+      const sira=Object.entries(kayit.clsSkor).sort((a,b)=>b[1]-a[1]).slice(0,3).map(x=>({ad:x[0],puan:x[1]}));
+      kayit.clsArsiv=[{hafta:kayit.clsHafta, sira}].concat(kayit.clsArsiv||[]).slice(0,12);
+    }
+    kayit.clsSkor={}; kayit.clsHafta=h; kayitYaz();
+  }
+}
+/* oyunlardan gelen (ad,puan) çiftlerini sınıf tablosuna yazar.
+   Oyun tabloları ad başına KÜMÜLATİF tuttuğundan, yalnız ARTIŞ (delta) işlenir —
+   memo anahtarı her oyun için son kümülatif değeri hatırlar. */
+function sinifSkorEkle(list, memo){
+  haftaKontrol();
+  if(!kayit[memo]) kayit[memo]={};
+  const snap=kayit[memo];
+  kayit.clsSkor=kayit.clsSkor||{};
+  list.forEach(o=>{
+    const esk=(o&&snap[o.ad])||0;
+    const yeni=(o&&o.puan)||0;
+    const fark=Math.max(0,yeni-esk);
+    if(fark>0) kayit.clsSkor[o.ad]=(kayit.clsSkor[o.ad]||0)+fark;
+    snap[o.ad]=yeni;
+  });
+  kayitYaz();
+}
+function puanTablosuAc(){
+  SES.tus();
+  haftaKontrol();
+  const ov=el("div","hamOrtu puanTablo");
+  ov.setAttribute("role","dialog"); ov.setAttribute("aria-modal","true");
+  ov.setAttribute("aria-label","Sınıf puan tablosu");
+  const kutu=el("div","hamKutu");
+  kutu.style.cssText="max-width:600px;max-height:86vh;overflow:auto";
+  kutu.append(el("div","","<b style=\"font-size:26px;color:var(--vurgu)\">🏆 Sınıf Puan Tablosu</b>"));
+  kutu.append(el("div","","<p style=\"margin:2px 0 6px;font-size:17px;opacity:.75\">Hafta: "+((kayit.clsHafta||sinifHafta()).replace("-H"," · hafta "))+"</p>"));
+  /* listedeki herkes + puan almış olanlar (liste değişse de kayıt silinmez) */
+  const liste=(kayit.ogrListe||[]).filter(Boolean).slice(0,60);
+  const sk=kayit.clsSkor||{};
+  const kim=new Set(liste); Object.keys(sk).forEach(a=>kim.add(a));
+  const satirlar=[...kim].map(ad=>({ad, puan:sk[ad]||0})).sort((a,b)=>b.puan-a.puan||a.ad.localeCompare(b.ad,"tr"));
+  if(!satirlar.length){
+    kutu.append(bilgiCip("Henüz yarış oynanmadı — Hafıza, Fabrika Yarışı ve Roket Yarışı'nda puan toplayın, tablo kendiliğinden dolacak!"));
+  }else{
+    const pod=el("div","pbPod");
+    const madalya=["🥇","🥈","🥉"], yuksek=["112px","88px","68px"], renk=[
+      "linear-gradient(180deg,#ffd766,#f4b23a)",
+      "linear-gradient(180deg,#dfe9f2,#b9cad8)",
+      "linear-gradient(180deg,#e8b98a,#cf9c62)"];
+    satirlar.slice(0,3).forEach((s,i)=>{
+      const k=el("div","pbKolon");
+      k.innerHTML=`<div style="font-size:36px">${madalya[i]}</div><div class="pbAd">${s.ad}</div><div class="pbAyak" style="height:${yuksek[i]};background:${renk[i]}">${s.puan}<small>⭐</small></div>`;
+      pod.append(k);
+    });
+    kutu.append(pod);
+    if(satirlar.length>3){
+      const kalan=el("div","pbListe");
+      satirlar.slice(3).forEach((s,i)=>{
+        const sat=el("div","pbSat");
+        sat.innerHTML=`<span>${i+4}.</span><span class="pbIsim">${s.ad}</span><b>${s.puan}</b><small>⭐</small>`;
+        kalan.append(sat);
+      });
+      kutu.append(kalan);
+    }
+  }
+  const arsiv=(kayit.clsArsiv||[]).filter(k=>k&&k.sira&&k.sira[0]);
+  if(arsiv.length){
+    kutu.append(el("div","","<b style=\"font-size:20px;margin-top:8px\">🗓️ Geçmiş haftaların şampiyonları</b>"));
+    const cipler=el("div","pbArsiv");
+    arsiv.forEach(k=>{
+      const c=el("div","bilgiCip",k.hafta.replace("-H"," · hafta ")+" · 🥇 "+k.sira[0].ad+" ("+k.sira[0].puan+" ⭐)");
+      cipler.append(c);
+    });
+    kutu.append(cipler);
+  }
+  const kapat=el("button","uic","✕ <small>Kapat</small>");
+  kapat.style.fontSize="20px";
+  kapat.addEventListener("click",()=>{ SES.tus(); ov.remove(); });
+  kutu.append(kapat);
+  ov.append(kutu);
+  document.body.appendChild(ov);
+  kapat.focus();
 }

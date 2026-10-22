@@ -812,6 +812,52 @@ iframeTest("roket: otomatik üçlü, 3 kelime seçeneği, doğru → roket ilerl
 });
 
 /* ------------------------------------------------------------------ */
+bolum("11 · Uygulama: Sınıf Puan Tablosu (haftalık şampiyon)");
+
+iframeTest("puan tablosu: sinifSkorEkle yalnız artışı işler, hafta anahtarı oluşur", "../uygulama/index.html", function (w) {
+  w.eval("haftaKontrol(); kayit.ogrListe=[]; kayit.clsSkor={}; kayit.clsSonHafiza={}; kayitYaz(); sinifSkorEkle([{ad:'Ali',puan:6},{ad:'Ayşe',puan:4}],'clsSonHafiza');");
+  var s1 = w.eval("kayit.clsSkor['Ali']");
+  if (s1 !== 6) return "ilk ekleme Ali: " + s1;
+  w.eval("sinifSkorEkle([{ad:'Ali',puan:8},{ad:'Ayşe',puan:4}],'clsSonHafiza');");
+  var s2 = w.eval("({a:kayit.clsSkor['Ali'], y:kayit.clsSkor['Ayşe']})");
+  if (s2.a !== 8) return "kısmi artış Ali: " + s2.a;
+  if (s2.y !== 4) return "geri gitmesin Ayşe: " + s2.y;
+  var h = w.eval("kayit.clsHafta");
+  if (!/^[0-9]{4}-H[0-9]{2}$/.test(h)) return "hafta biçimi: " + h;
+  w.eval("kayit.clsSkor={}; kayit.clsSonHafiza={}; kayitYaz();");
+  return true;
+});
+
+iframeTest("puan tablosu: hafta döndüğünde ilk 3 arşive alınır, tablo sıfırlanır", "../uygulama/index.html", function (w) {
+  w.eval("kayit.clsHafta='2020-H01'; kayit.clsSkor={'Ali':9,'Ayşe':5,'Mert':2}; kayit.clsArsiv=[]; kayitYaz(); haftaKontrol();");
+  var alt = w.eval("(function(){ var k=kayit; return {arsivUzun:k.clsArsiv.length, eskiHafta:k.clsArsiv[0]?k.clsArsiv[0].hafta:null, sira1:k.clsArsiv[0]&&k.clsArsiv[0].sira[0]?k.clsArsiv[0].sira[0].ad:null, sira1P:k.clsArsiv[0]&&k.clsArsiv[0].sira[0]?k.clsArsiv[0].sira[0].puan:null, skorAdet:Object.keys(k.clsSkor).length, hafta:k.clsHafta}; })()");
+  if (alt.arsivUzun !== 1) return "arşive geçmedi";
+  if (alt.eskiHafta !== "2020-H01") return "arşiv haftası: " + alt.eskiHafta;
+  if (alt.sira1 !== "Ali" || alt.sira1P !== 9) return "şampiyon: " + alt.sira1 + " " + alt.sira1P;
+  if (alt.skorAdet !== 0) return "tablo sıfırlanmadı";
+  if (alt.hafta === "2020-H01") return "hafta güncellenmedi";
+  w.eval("kayit.clsSkor={}; kayit.clsArsiv=[]; kayit.clsSonHafiza={}; kayit.clsSonFabrika={}; kayit.clsSonRoket={}; kayit.clsHafta=sinifHafta(); kayitYaz();");
+  return true;
+});
+
+iframeTest("puan tablosu: sınıf listesindeki herkes görünür, podyum dolu", "../uygulama/index.html", function (w, d) {
+  w.eval("kayit.ogrListe=['Ali','Ayşe','Mert','Zeynep']; kayit.clsSkor={'Ali':9,'Ayşe':5}; kayit.clsArsiv=[]; kayitYaz();");
+  d.getElementById("btnTablo").click();
+  var ov = d.querySelector(".puanTablo");
+  if (!ov) return "katman açılmadı";
+  var adaylar = ov.textContent;
+  ["Ali", "Ayşe", "Mert", "Zeynep"].forEach(function (ad) {
+    if (adaylar.indexOf(ad) < 0) return "listede yok: " + ad;
+  });
+  if (ov.querySelectorAll(".pbAyak").length !== 3) return "podyum kolon";
+  if (ov.querySelector(".pbIsim").textContent !== "Zeynep") return "4. sıra değil: " + ov.querySelector(".pbIsim").textContent;
+  if (ov.textContent.indexOf("Hafta: ") < 0) return "hafta etiketi yok";
+  ov.querySelector("button.uic").click();
+  w.eval("kayit.ogrListe=[]; kayit.clsSkor={}; kayitYaz();");
+  return true;
+});
+
+/* ------------------------------------------------------------------ */
 function ozetYaz() {
   var ozet = document.getElementById("ozet");
   if (bekleyen > 0) {

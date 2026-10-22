@@ -215,6 +215,9 @@ Kök `index.html` artık `assets/font.css` yükler ve TTKB `local()` yazı tipin
   sistem fontu (gömme/dağıtım için yazılı izin gerekir).
 - `localStorage`: normal HTTP origin altında yazma → sayfa yenileme → başka sayfada
   okuma doğrulandı. Anahtarlar `GIZLILIK.md` ve `YAYIN.md` içinde listelenir.
+- **GitHub Pages:** https://klblip.github.io/hece-parki/ — `main` dalı `/docs`
+  klasöründen yayınlandı; ana sayfa 5 kart/18 etkinlik, Hece Rallisi 29 çip,
+  özel 404 ve sayfalar arası `localStorage` HTTPS üzerinde doğrulandı.
 
 ---
 

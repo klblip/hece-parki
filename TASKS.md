@@ -79,4 +79,5 @@
 | 22.10.2026 | Web sitesi paketi 1.0 | ✅ | 29 dosya, `.cmd`/`.ps1` yok; alt klasörde HTTP 200 (5 kart, 29 çip, 5 kapsama); bağlantı denetimi; konsol temiz; kök TTKB fontu |
 | 22.10.2026 | `test/test.html` güncel koşu | ✅ 86/86 | Hece Fabrikası + Roket testleri dahil; konsol hatası yok |
 | 22.10.2026 | localStorage kalıcılığı | ✅ | HTTP sitesinde yaz → yenile → başka sayfa oku; anahtarlar `okuyorum_v1`, `okuma_bayrami_v1`, oyun/rekor/fonem |
+| 22.10.2026 | GitHub Pages yayını | ✅ | https://klblip.github.io/hece-parki/ — `main`/`docs`; 18 etkinlik, 5 kart, 29 çip, 404, localStorage |
 | 21.10.2026 | Kök `index.html` kartları | ✅ 4/4 HTTP 200 | Dış bağlantı yok |
