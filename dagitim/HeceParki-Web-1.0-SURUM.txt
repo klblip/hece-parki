@@ -1,0 +1,14 @@
+﻿Hece Parki - statik web sitesi
+Surum       : 1.0
+Tarih       : 2026-10-22
+Dosya sayisi: 29
+Acik boyut  : 0.42 MB
+Zip boyutu  : 0.14 MB
+SHA256      : AEED5CFA3EE232664F5BC4F6D48A1AB1647D8E008BCDCD0970FB5C6BDC9783D2
+Baglanti    : 38 yerel baglanti denetlendi
+
+Kaynak testleri: 86/86 (test/test.html, yerel sunucu)
+Site testi    : HTTP kok + alt klasor + file:// render
+
+Yayinlama: YAYIN.md
+Gizlilik : GIZLILIK.md

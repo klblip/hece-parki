@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Okuyorum — İlk Okuma Yazma Oyunları</title>
+<link rel="stylesheet" href="../assets/font.css">
+<link rel="stylesheet" href="css/stil.css">
+</head>
+<body>
+<div id="hata" role="alert"></div>
+<div id="duyuru" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+<script>
+window.addEventListener("error",function(e){ var h=document.getElementById("hata"); if(h) h.textContent=(e.message||"hata"); });
+</script>
+<header id="ustbar">
+  <button id="btnEv" class="uic" aria-label="Ana ekran">🏠</button>
+  <button id="btnMenu" class="uic" aria-label="Menü">☰</button>
+  <div id="baslik">Okuyorum</div>
+  <button id="btnSes" class="uic" aria-label="Sesi aç veya kapat">🔊</button>
+  <button id="btnOgr" class="uic" aria-label="Öğrenci seç (çarkıfelek)" title="Öğrenci seç (çarkıfelek)">🎡</button>
+  <button id="btnYonet" class="uic" aria-label="Öğretmen paneli">⚙️</button>
+  <div id="puanChip" class="uic" aria-live="polite">🐰 0</div>
+</header>
+<main id="main"></main>
+<button id="btnOgrFab" class="carkSabiti" aria-label="Öğrenci seç (çarkıfelek)" title="Öğrenci seç (çarkıfelek)"><b>🎡</b><span>Öğrenci seç</span></button>
+<div id="dekor" aria-hidden="true">
+  <div class="gunes"><i></i><span>☀️</span></div>
+  <div class="bulut b1">☁️</div>
+  <div class="bulut b2">☁️</div>
+  <div class="bulut b3">☁️</div>
+  <div class="bulut b4">☁️</div>
+  <div class="balon m1">🎈</div>
+  <div class="balon m2">🎈</div>
+  <div class="kus k1">🕊️</div>
+  <div class="kus k2">🦋</div>
+  <div class="agac t1">🌳</div>
+  <div class="agac t2">🌳</div>
+  <svg class="tepe" viewBox="0 0 1000 260" preserveAspectRatio="none">
+    <path d="M0,120 Q160,42 340,105 Q470,150 640,110 Q830,70 1000,115 L1000,260 L0,260 Z" fill="#8cc84c"/>
+    <path d="M0,170 Q220,98 460,158 Q620,200 810,160 Q910,140 1000,158 L1000,260 L0,260 Z" fill="#6cb53a"/>
+    <path d="M0,210 Q260,162 520,196 Q760,225 1000,196 L1000,260 L0,260 Z" fill="#57a12e"/>
+    <ellipse cx="205" cy="205" rx="9" ry="9" fill="#fff" /><circle cx="205" cy="205" r="3.4" fill="#ffca28"/>
+    <ellipse cx="431" cy="232" rx="10" ry="10" fill="#fff"/><circle cx="431" cy="232" r="3.8" fill="#ffca28"/>
+    <ellipse cx="662" cy="209" rx="9" ry="9" fill="#fff"/><circle cx="662" cy="209" r="3.4" fill="#ffca28"/>
+    <ellipse cx="880" cy="238" rx="10" ry="10" fill="#fff"/><circle cx="880" cy="238" r="3.8" fill="#ffca28"/>
+    <g stroke="#3e7d1f" stroke-width="2.6" stroke-linecap="round" opacity=".5">
+      <path d="M120,258 q3,-13 5,-17"/><path d="M126,258 q-2,-11 -6,-14"/>
+      <path d="M290,252 q3,-12 5,-16"/><path d="M296,252 q-2,-10 -6,-13"/>
+      <path d="M505,258 q3,-13 5,-17"/><path d="M511,258 q-2,-11 -6,-14"/>
+      <path d="M760,252 q3,-12 5,-16"/><path d="M766,252 q-2,-10 -6,-13"/>
+      <path d="M935,258 q3,-13 5,-17"/><path d="M941,258 q-2,-11 -6,-14"/>
+    </g>
+  </svg>
+  <div class="cicekler">🌼🌷🌼🌻🌷🌼🌷🌼</div>
+</div>
+<script src="../assets/veri.js"></script>
+<script src="../assets/sesler/manifest.js"></script>
+<script src="../assets/fonem.js"></script>
+<script>window.SES_TABANI = "../assets/sesler/";</script>
+<script src="js/veri.js"></script>
+<script src="js/ses.js"></script>
+<script src="js/uygulama.js"></script>
+<script src="js/studyo.js"></script>
+</body>
+</html>

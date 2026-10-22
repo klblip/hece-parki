@@ -1,0 +1,489 @@
+﻿/* =====================================================================
+   OKUMA BAYRAMI - 1. Sınıf Türkçe Okuma-Yazma Oyunları
+   Tek dosya: HTML + CSS + JS · Çevrimdışı · Dokunmatik / Akıllı Tahta
+   ===================================================================== */
+:root{
+  --pink:#ff8fb1; --blue:#5cb3ff; --green:#5ecf8b; --yellow:#ffcf5c;
+  --purple:#b18cff; --orange:#ff9f5a; --teal:#59d6cf;
+  --ink:#2c3a55; --ink2:#6b7c9c; --line:#e6edf7;
+  --shadow:0 10px 26px rgba(44,58,85,.13);
+  --shadow2:0 4px 12px rgba(44,58,85,.10);
+  --r:24px;
+}
+*{box-sizing:border-box}
+html,body{
+  height:100%; margin:0; padding:0; overflow:hidden;
+  color:var(--ink);
+  font-family:"Trebuchet MS","Segoe UI",Verdana,system-ui,sans-serif;
+  -webkit-tap-highlight-color:transparent;
+  -webkit-user-select:none; user-select:none;
+  touch-action:manipulation;
+}
+body{
+  background:
+    radial-gradient(circle at 10% 6%, #fff3bf 0 9%, transparent 10%),
+    radial-gradient(circle at 92% 10%, #ffdcea 0 8%, transparent 9%),
+    radial-gradient(circle at 20% 96%, #d9f5e6 0 10%, transparent 11%),
+    linear-gradient(180deg,#eaf7ff 0%, #f4f0ff 55%, #effdf5 100%);
+}
+button{font-family:inherit;color:inherit;border:0;background:none;cursor:pointer;font-size:inherit;padding:0}
+button:focus-visible{outline:3px dashed var(--blue);outline-offset:3px}
+.spacer{flex:1}
+
+/* ---------- Butonlar ---------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:.45em;
+  min-height:clamp(42px,7vh,72px);
+  padding:0 clamp(14px,1.6vw,28px);
+  border-radius:999px;background:#fff;border:2px solid var(--line);
+  box-shadow:var(--shadow2);font-weight:900;
+  font-size:clamp(13px,2.1vh,21px);transition:transform .12s, box-shadow .12s;
+  white-space:nowrap;
+}
+.btn:active{transform:translateY(2px) scale(.98)}
+.btn.primary{background:linear-gradient(180deg,#74c6ff,#3d9bf0);color:#fff;border-color:#2f8ce0;box-shadow:0 6px 0 #2c7fcc}
+.btn.green{background:linear-gradient(180deg,#84e0a6,#43bb72);color:#fff;border-color:#37a865;box-shadow:0 6px 0 #349b57}
+.btn.pink{background:linear-gradient(180deg,#ffa9c4,#ff6f9c);color:#fff;border-color:#f25985;box-shadow:0 6px 0 #d94b74}
+.btn.purple{background:linear-gradient(180deg,#c6a8ff,#9a6dfa);color:#fff;border-color:#8a5ce8;box-shadow:0 6px 0 #7a4dcf}
+.btn.sun{background:linear-gradient(180deg,#ffe08a,#ffc23d);color:#6b4500;border-color:#e9ab1c;box-shadow:0 6px 0 #cf9414}
+.btn.ghost{background:#fff}
+.btn.big{min-height:clamp(48px,9vh,88px);font-size:clamp(15px,2.6vh,26px);padding:0 clamp(18px,2.4vw,40px)}
+.btn[disabled]{opacity:.45;pointer-events:none}
+
+.iconbtn{
+  width:clamp(44px,7vh,66px);height:clamp(44px,7vh,66px);
+  border-radius:50%;background:#fff;border:2px solid var(--line);
+  box-shadow:var(--shadow2);display:grid;place-items:center;
+  font-size:clamp(17px,3vh,30px);transition:transform .12s;
+}
+.iconbtn:active{transform:scale(.93)}
+.iconbtn.off{opacity:.4;filter:grayscale(1)}
+.iconbtn.wide{width:auto;border-radius:999px;padding:0 clamp(10px,1.4vw,20px);font-weight:900;font-size:clamp(13px,2.1vh,20px);gap:.4em;grid-auto-flow:column}
+
+/* ---------- Üst bar ---------- */
+#topbar{
+  flex:0 0 auto;display:flex;align-items:center;gap:clamp(5px,.9vw,14px);
+  padding:clamp(5px,1.1vh,14px) clamp(8px,1.3vw,22px);
+}
+.brand{display:flex;align-items:center;gap:.5em;font-weight:900;font-size:clamp(15px,2.5vh,28px)}
+.brand .logo{
+  width:clamp(30px,5.2vh,54px);height:clamp(30px,5.2vh,54px);
+  display:grid;place-items:center;background:#fff;border-radius:16px;
+  box-shadow:var(--shadow2);font-size:clamp(17px,3vh,30px);
+}
+.letters-mini{display:flex;gap:5px;flex-wrap:wrap;max-width:34vw;overflow:hidden}
+.letters-mini b{
+  background:#fff;border:2px solid var(--line);border-radius:12px;
+  padding:1px clamp(6px,1vw,12px);font-size:clamp(11px,1.8vh,19px);
+}
+.hud{
+  display:flex;align-items:center;gap:.5em;background:#fff;border:2px solid var(--line);
+  border-radius:999px;padding:2px clamp(8px,1.2vw,18px);box-shadow:var(--shadow2);
+  font-weight:900;font-size:clamp(12px,2vh,20px);white-space:nowrap;
+}
+.hud .pts{color:#e2801f}
+
+/* ---------- Sahne / ekranlar ---------- */
+#app{position:fixed;inset:0;display:flex;flex-direction:column}
+#stage{position:relative;flex:1 1 auto;min-height:0}
+.screen{position:absolute;inset:0;display:none;flex-direction:column;min-height:0}
+.screen.on{display:flex;animation:fadeIn .22s ease}
+@keyframes fadeIn{from{opacity:0;transform:scale(.99)}to{opacity:1;transform:none}}
+
+/* ---------- Ana menü ---------- */
+#scr-menu{padding:clamp(4px,1vh,16px) clamp(10px,1.8vw,34px) clamp(8px,1.6vh,22px)}
+.menuHead{display:flex;align-items:center;justify-content:space-between;gap:clamp(8px,1.4vw,20px);flex-wrap:wrap}
+.menuTitle{font-weight:900;font-size:clamp(17px,3.2vh,34px);line-height:1.15}
+.menuSub{color:var(--ink2);font-weight:800;font-size:clamp(11px,1.9vh,18px);margin-top:.15em}
+.cards{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:clamp(8px,1.3vw,22px);flex:1;min-height:0;align-content:center;
+  padding:clamp(6px,1.4vh,20px) 0;
+}
+.gamecard{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:.35em;background:#fff;border-radius:var(--r);border:4px solid #fff;
+  box-shadow:var(--shadow);padding:clamp(8px,1.6vh,20px);min-height:0;
+  transition:transform .16s, box-shadow .16s;
+}
+.gamecard:hover{transform:translateY(-5px)}
+.gamecard:active{transform:scale(.97)}
+.gamecard .ico{font-size:clamp(30px,8.4vh,86px);line-height:1}
+.gamecard .ttl{font-weight:900;font-size:clamp(13px,2.4vh,25px);text-align:center;line-height:1.1}
+.gamecard .dsc{color:var(--ink2);font-weight:800;font-size:clamp(10px,1.7vh,16px);text-align:center;line-height:1.25}
+.gamecard.c1{border-color:#ffd9e6}
+.gamecard.c2{border-color:#d6ecff}
+.gamecard.c3{border-color:#e2d9ff}
+.gamecard.c4{border-color:#d6f5e2}
+
+/* ---------- Oyun 1: Uçan Balon (gökyüzü + uçan balon + hece/kelime kutusu) ---------- */
+#scr-quiz{padding:0 clamp(6px,1.2vw,22px) clamp(4px,1vh,14px);gap:clamp(4px,.9vh,12px)}
+.qbar{display:flex;align-items:center;gap:clamp(6px,1.1vw,18px);padding:clamp(3px,.8vh,10px) 0}
+.qtext{flex:1;text-align:center;font-weight:900;font-size:clamp(14px,2.6vh,27px);line-height:1.2}
+.qcount{
+  font-weight:900;color:var(--ink2);background:#fff;border-radius:999px;
+  padding:.28em .8em;box-shadow:var(--shadow2);font-size:clamp(11px,1.9vh,18px);white-space:nowrap;
+}
+/* Gökyüzü */
+.flyzone{
+  position:relative;flex:1 1 auto;min-height:0;overflow:hidden;
+  border-radius:clamp(16px,3vh,30px);border:4px solid #fff;
+  background:linear-gradient(180deg,#a9dcff 0%, #cfeaff 45%, #e9f7ff 100%);
+  box-shadow:inset 0 8px 26px rgba(90,140,200,.18), var(--shadow2);
+}
+.flyzone .sun{
+  position:absolute;top:7%;right:5%;width:clamp(30px,7vh,66px);height:clamp(30px,7vh,66px);
+  border-radius:50%;background:radial-gradient(circle at 42% 38%,#fff8c9,#ffd451);
+  box-shadow:0 0 34px #ffe07a;animation:sunPulse 4s ease-in-out infinite alternate;
+}
+@keyframes sunPulse{from{transform:scale(1)}to{transform:scale(1.09)}}
+.flyzone .hill{
+  position:absolute;left:-5%;right:-5%;bottom:-6%;height:26%;
+  background:radial-gradient(120% 100% at 30% 0%, #b9e8b1 0 60%, transparent 61%),
+             radial-gradient(120% 100% at 74% 6%, #a7e0a0 0 58%, transparent 59%);
+  opacity:.75;
+}
+.cloud{
+  position:absolute;height:clamp(18px,3.6vh,36px);border-radius:999px;background:#fff;opacity:.92;
+  filter:drop-shadow(0 6px 10px rgba(120,160,200,.22));animation:drift linear infinite;
+}
+.cloud::before,.cloud::after{content:"";position:absolute;background:#fff;border-radius:50%}
+.cloud::before{width:68%;height:165%;left:7%;bottom:34%}
+.cloud::after{width:52%;height:130%;right:9%;bottom:40%}
+@keyframes drift{from{transform:translateX(-34vw)}to{transform:translateX(120vw)}}
+.cloud.c1{width:clamp(66px,11vw,132px);top:13%;animation-duration:40s}
+.cloud.c2{width:clamp(48px,8.5vw,104px);top:40%;animation-duration:56s;animation-delay:-16s;opacity:.75}
+.cloud.c3{width:clamp(58px,9.5vw,116px);top:66%;animation-duration:47s;animation-delay:-30s;opacity:.6}
+/* Dekoratif uçan balonlar */
+.db{position:absolute;bottom:-22%;width:clamp(24px,4.2vh,46px);opacity:.5;
+  animation:rise linear infinite;pointer-events:none;z-index:1}
+.db .bface{width:100%;box-shadow:inset -4px -5px 0 rgba(0,0,0,.06)}
+.db .bstr{width:clamp(6px,1.4vh,12px);height:clamp(8px,2.4vh,22px)}
+@keyframes rise{
+  from{bottom:-22%;transform:rotate(-4deg)}
+  to{bottom:108%;transform:rotate(5deg)}
+}
+/* Uçan hedef balon */
+.flyballoon{position:absolute;left:-20%;bottom:34%;width:clamp(84px,14.5vh,160px);z-index:4;
+  pointer-events:none;will-change:left,bottom,transform}
+.flyballoon .bob{animation:bob var(--bdur,2.6s) ease-in-out infinite alternate}
+.flyballoon.landed .bob{animation:landBob 1.5s ease-in-out infinite alternate}
+@keyframes landBob{from{transform:translateY(0) scale(1)}to{transform:translateY(-6px) scale(1.02)}}
+@keyframes bob{from{transform:translateY(0) rotate(-2deg)}to{transform:translateY(-2.2vh) rotate(2deg)}}
+.bface{
+  width:min(100%,27vh);aspect-ratio:1 / 1.14;
+  border-radius:50% 50% 44% 44% / 56% 56% 44% 44%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:
+    radial-gradient(circle at 33% 26%, rgba(255,255,255,.75), transparent 44%),
+    var(--bg,linear-gradient(180deg,#8fd3ff,#4a9eec));
+  box-shadow:inset -7px -9px 0 rgba(0,0,0,.06), var(--shadow);
+  color:#fff;font-weight:900;text-align:center;padding:0 .35em;
+  border:3px solid rgba(255,255,255,.6);
+  transition:transform .15s;
+}
+.flyballoon .bface{width:100%}
+/* Balonun yüzü (içinde yazı yok, sadece sevimli bir yüz) */
+.bface .fface{width:58%;height:auto;opacity:.9}
+.bface .fface circle{fill:#fff}
+.bface .fface path{stroke:#fff;stroke-width:3.4;fill:none;stroke-linecap:round}
+.bface .blabel{font-size:clamp(16px,4.2vh,44px);line-height:1.05;word-break:break-word}
+.bface.lbl-m .blabel{font-size:clamp(14px,3.3vh,34px)}
+.bface.lbl-l .blabel{font-size:clamp(12px,2.5vh,26px)}
+.bface .bemoji{font-size:clamp(30px,9vh,80px);line-height:1.05}
+.bface.lbl-m .bemoji,.bface.lbl-l .bemoji{font-size:clamp(24px,7vh,60px)}
+.bstr{width:clamp(10px,2vh,20px);height:clamp(14px,4.6vh,46px);color:rgba(80,105,145,.42)}
+.bstr svg{width:100%;height:100%;display:block}
+.flyballoon .bstr{width:clamp(8px,1.8vh,16px);height:clamp(12px,3.6vh,34px);color:rgba(50,75,115,.5)}
+/* Hece / kelime kutuları */
+.boxrow{
+  flex:0 0 auto;display:flex;align-items:flex-end;justify-content:center;
+  gap:clamp(5px,1.1vw,16px);height:clamp(88px,19vh,180px);
+  padding:clamp(4px,.8vh,10px) clamp(4px,1vw,16px) 0;
+}
+.kbox{
+  position:relative;flex:0 1 clamp(70px,13vw,168px);height:100%;
+  border-radius:16px 16px 12px 12px;border:4px solid rgba(0,0,0,.12);
+  background:linear-gradient(180deg, var(--bg,#8fd3ff), var(--bg2,#4a9eec));
+  box-shadow:0 7px 0 rgba(0,0,0,.18), var(--shadow2);
+  display:grid;place-items:center;padding:clamp(4px,.8vh,10px);
+  transition:transform .22s, box-shadow .22s;
+}
+.kbox::before,.kbox::after{
+  content:"";position:absolute;left:-4px;right:-4px;height:clamp(7px,1.2vh,13px);
+  background:rgba(255,255,255,.45);border-top:2px solid rgba(255,255,255,.7);
+  border-bottom:2px solid rgba(0,0,0,.06);
+}
+.kbox::before{top:22%}
+.kbox::after{bottom:20%}
+.kbox .kface{
+  position:relative;z-index:1;background:rgba(255,255,255,.94);color:#2c3a55;
+  border-radius:12px;padding:.16em .28em;box-shadow:inset 0 -3px 0 rgba(0,0,0,.07);
+  font-weight:900;font-size:clamp(17px,4.2vh,44px);line-height:1.05;
+  word-break:break-word;text-align:center;
+}
+.kbox .kface.pop{animation:facePop .45s ease}
+@keyframes facePop{from{transform:scale(.75)}60%{transform:scale(1.08)}to{transform:scale(1)}}
+/* Okunmuş kutu */
+.kbox .tick{
+  position:absolute;top:-9px;right:-9px;z-index:3;display:none;place-items:center;
+  width:clamp(22px,3.6vh,36px);height:clamp(22px,3.6vh,36px);border-radius:50%;
+  background:#4cc27c;color:#fff;border:3px solid #fff;font-weight:900;
+  font-size:clamp(12px,2vh,20px);box-shadow:var(--shadow2);
+}
+.kbox.read .tick{display:grid}
+.kbox.read{filter:saturate(.6)}
+.kbox.read .kface{color:#1f8a4d}
+.kbox.target{animation:boxPulse .85s ease-in-out infinite alternate}
+@keyframes boxPulse{
+  from{transform:translateY(-4px) scale(1);box-shadow:0 7px 0 rgba(0,0,0,.18),0 0 0 4px rgba(255,214,92,.55), var(--shadow2)}
+  to{transform:translateY(-9px) scale(1.04);box-shadow:0 7px 0 rgba(0,0,0,.18),0 0 0 9px rgba(255,214,92,.75), var(--shadow2)}
+}
+.kbox.collect{animation:collect .62s ease-in forwards}
+@keyframes collect{
+  55%{transform:translateY(-16px) scale(1.06)}
+  100%{transform:translateY(-38px) scale(.55);opacity:0}
+}
+.readbar{flex:0 0 auto;display:flex;justify-content:center;padding:clamp(2px,.5vh,8px) 0 0}
+#quizNext{min-width:min(60vw,420px);opacity:.45}
+#quizNext.ready{opacity:1;animation:readyPop .5s ease}
+@keyframes readyPop{from{transform:scale(.9)}to{transform:scale(1)}}
+@keyframes shake{
+  0%,100%{transform:translateX(0)}
+  20%{transform:translateX(-8px) rotate(-3deg)}
+  50%{transform:translateX(8px) rotate(3deg)}
+  80%{transform:translateX(-5px)}
+}
+/* ---------- Yarış ekranı ---------- */
+#scr-race{padding:0 clamp(6px,1vw,18px) clamp(5px,1vh,14px)}
+.track{display:flex;flex-direction:column;gap:clamp(3px,.7vh,10px);padding:clamp(2px,.6vh,10px) 0}
+.lane{
+  position:relative;height:clamp(30px,6.4vh,60px);background:#fff;border-radius:999px;
+  box-shadow:var(--shadow2);overflow:hidden;border:2px solid var(--line);
+}
+.lane .fill{
+  position:absolute;inset:0;width:0;opacity:.45;
+  background:linear-gradient(90deg,#ffe6a6,#ffcf5c);transition:width .45s ease;
+}
+.lane.l2 .fill{background:linear-gradient(90deg,#d6e9ff,#8fc9ff)}
+.lane .runner{
+  position:absolute;top:50%;left:4%;transform:translate(-50%,-50%);
+  font-size:clamp(22px,5vh,46px);transition:left .45s cubic-bezier(.34,1.35,.64,1);
+  filter:drop-shadow(0 3px 4px rgba(0,0,0,.18));
+}
+.lane .flag{position:absolute;right:4px;top:50%;transform:translateY(-50%);font-size:clamp(16px,3.2vh,32px)}
+.lane .nm{
+  position:absolute;left:clamp(8px,1.4vw,18px);top:50%;transform:translateY(-50%);
+  font-weight:900;font-size:clamp(10px,1.8vh,17px);color:var(--ink2);max-width:45%;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.raceQ{display:flex;align-items:center;justify-content:center;gap:clamp(6px,1vw,16px);padding:clamp(2px,.6vh,8px) 0}
+.raceQ .qtext{flex:0 1 auto}
+.raceQ .remoji{font-size:clamp(26px,7vh,64px);line-height:1}
+.raceSplit{display:flex;flex:1;min-height:0;gap:clamp(6px,1vw,18px)}
+.side{
+  flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:clamp(4px,.8vh,12px);
+  background:#fff;border-radius:var(--r);border:4px solid #d6ecff;box-shadow:var(--shadow);
+  padding:clamp(6px,1.2vh,16px);position:relative;
+}
+.side.p2{border-color:#ffd9e6}
+.side .pname{
+  text-align:center;font-weight:900;font-size:clamp(12px,2.1vh,22px);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.side .opts{display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:1fr;gap:clamp(5px,.9vh,14px);flex:1;min-height:0}
+.side .msg{
+  position:absolute;left:50%;bottom:6px;transform:translateX(-50%);
+  background:rgba(44,58,85,.9);color:#fff;font-weight:900;
+  padding:.25em .8em;border-radius:999px;font-size:clamp(11px,1.8vh,17px);opacity:0;transition:.2s;
+  pointer-events:none;white-space:nowrap;
+}
+.side .msg.on{opacity:1}
+.opt{
+  background:linear-gradient(180deg,#f6faff,#e7f2ff);border:3px solid #cfe4ff;border-radius:18px;
+  display:grid;place-items:center;font-weight:900;color:#2c3a55;padding:.1em;min-height:0;
+  font-size:clamp(17px,4.4vh,48px);line-height:1.05;word-break:break-word;text-align:center;
+  transition:transform .12s;
+}
+.opt:active{transform:scale(.95)}
+.side.p2 .opt{background:linear-gradient(180deg,#fff7fa,#ffe9f2);border-color:#ffd0e2}
+.opt.pic{font-size:clamp(28px,10vh,84px)}
+.opt.ok{background:linear-gradient(180deg,#c6f6d8,#7fdfa0);border-color:#4fc47c}
+.opt.no{background:#eef2f8;border-color:#dbe3ee;color:#a7b3c7;animation:shake .35s}
+.opt.dis{pointer-events:none;opacity:.75}
+.winbadge{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(.6);
+  font-size:clamp(34px,12vh,110px);opacity:0;transition:.25s;pointer-events:none;
+}
+.winbadge.on{opacity:1;transform:translate(-50%,-50%) scale(1)}
+
+/* ---------- Hafıza kartları ---------- */
+#scr-mem{padding:0 clamp(8px,1.4vw,26px) clamp(6px,1.4vh,16px)}
+.memHead{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:clamp(5px,1vw,16px);padding:clamp(3px,.8vh,10px) 0;font-weight:900;font-size:clamp(12px,2.1vh,22px)}
+.memHead span{background:#fff;border-radius:999px;padding:.25em .9em;box-shadow:var(--shadow2)}
+.memGrid{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:1fr;gap:clamp(6px,1.2vh,18px);flex:1;min-height:0}
+.mcard{background:none;border:0;perspective:900px}
+.mcard .inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .38s}
+.mcard.open .inner{transform:rotateY(180deg)}
+.mface{
+  position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  border-radius:18px;display:grid;place-items:center;box-shadow:var(--shadow2);
+  font-weight:900;text-align:center;padding:4px;overflow:hidden;
+}
+.mfront{background:linear-gradient(160deg,#8fd3ff,#b18cff);color:#fff;font-size:clamp(24px,7.5vh,64px)}
+.mback{background:#fff;border:3px solid var(--line);transform:rotateY(180deg);font-size:clamp(15px,4vh,34px);word-break:break-word;line-height:1.05}
+.mback.harfler{letter-spacing:.16em;font-size:clamp(14px,3.6vh,32px);color:#3c5b86}
+.mcard.done .mback{background:#eefbf3;border-color:#a7e6c1;box-shadow:inset 0 0 0 4px #cdf3dd}
+/* Eşleşen kartlar kaybolur (yerleri boş kalır, oyun tahtası kaymaz) */
+.mcard.gone{pointer-events:none}
+.mcard.gone .inner{animation:vanish .5s ease forwards}
+@keyframes vanish{
+  40%{transform:rotateY(180deg) scale(1.14)}
+  100%{transform:rotateY(180deg) scale(.15);opacity:0}
+}
+/* Animasyon çalışmasa bile eşleşen kart görünmez olsun */
+.mcard.off{visibility:hidden}
+
+/* ---------- Cümle kurma ---------- */
+#scr-sent{padding:clamp(2px,.6vh,10px) clamp(10px,1.8vw,32px) clamp(6px,1.4vh,18px)}
+.sentTop{display:flex;align-items:center;justify-content:center;gap:clamp(6px,1.2vw,18px);font-weight:900;font-size:clamp(13px,2.4vh,26px);padding:clamp(2px,.6vh,8px) 0}
+.slots{
+  flex:1.1 1 0;min-height:0;display:flex;flex-wrap:wrap;align-content:center;justify-content:center;
+  gap:clamp(6px,1.2vw,18px);background:#fff;border-radius:var(--r);box-shadow:var(--shadow);
+  padding:clamp(8px,1.8vh,22px);border:3px solid var(--line);transition:border-color .2s;
+}
+.slots.ok{border-color:#7fdfa0;background:#f4fdf8}
+.slots.no{border-color:#ffb3c8;background:#fff6f9}
+.bank{
+  flex:.85 1 0;min-height:0;display:flex;flex-wrap:wrap;align-content:center;justify-content:center;
+  gap:clamp(6px,1.2vw,18px);padding:clamp(6px,1.4vh,18px) 0;
+}
+.chip{
+  padding:clamp(6px,1.2vh,16px) clamp(12px,1.8vw,28px);border-radius:16px;
+  background:linear-gradient(180deg,#fff,#f1f7ff);border:3px solid #d8e8ff;color:var(--ink);
+  font-weight:900;font-size:clamp(16px,3.8vh,40px);box-shadow:var(--shadow2);transition:transform .12s;
+}
+.chip:active{transform:scale(.95)}
+.chip.used{opacity:.22;pointer-events:none}
+.chip.in{background:linear-gradient(180deg,#dcf8e7,#b6eecb);border-color:#8adcaa}
+.chip.shakeX{animation:shake .35s}
+
+/* ---------- Kaplamalar (overlay) ---------- */
+.overlay{
+  position:absolute;inset:0;display:none;place-items:center;
+  background:rgba(28,40,70,.46);backdrop-filter:blur(4px);
+  z-index:60;padding:clamp(8px,2vh,20px);
+}
+.overlay.on{display:grid;animation:fadeIn .2s ease}
+.panelBox{
+  background:#fff;border-radius:clamp(18px,3vh,30px);
+  box-shadow:0 24px 60px rgba(20,30,60,.38);
+  padding:clamp(14px,2.6vh,34px);max-width:min(920px,94vw);max-height:92vh;overflow:auto;
+  display:flex;flex-direction:column;gap:clamp(8px,1.5vh,20px);align-items:center;text-align:center;
+}
+.panelBox h2{margin:0;font-size:clamp(19px,3.8vh,38px);line-height:1.15}
+.panelBox .sub{color:var(--ink2);font-weight:800;font-size:clamp(12px,2vh,19px)}
+.row{display:flex;flex-wrap:wrap;gap:clamp(6px,1.2vw,16px);justify-content:center;align-items:center}
+.stars{display:flex;gap:.12em;font-size:clamp(28px,8vh,72px);line-height:1}
+.stars i{display:inline-block;animation:starIn .5s backwards}
+@keyframes starIn{from{transform:scale(0) rotate(-90deg);opacity:0}to{transform:none;opacity:1}}
+.winscore{font-weight:900;font-size:clamp(24px,6vh,58px);color:#e2801f}
+.drawName{
+  font-weight:900;font-size:clamp(30px,10vh,96px);line-height:1.05;
+  background:linear-gradient(180deg,#fff6d1,#ffe08a);border-radius:24px;
+  padding:.08em .5em;box-shadow:var(--shadow);border:4px solid #ffd76b;
+  min-width:min(70vw,520px);word-break:break-word;
+}
+.drawName.rolling{animation:pulse .12s infinite alternate}
+@keyframes pulse{from{transform:scale(1)}to{transform:scale(1.05)}}
+.pick{display:flex;flex-direction:column;gap:2px;font-weight:900;font-size:clamp(11px,1.8vh,17px);text-align:left;color:var(--ink2)}
+.pick select,.pick input{
+  font-family:inherit;font-weight:900;font-size:clamp(13px,2.1vh,20px);color:var(--ink);
+  border:3px solid #d8e8ff;border-radius:14px;padding:.3em .5em;background:#fff;min-width:min(38vw,240px);
+}
+/* ---------- Öğretmen paneli ---------- */
+#panel{
+  position:absolute;top:0;right:0;bottom:0;width:min(620px,95vw);z-index:80;
+  background:#fff;box-shadow:-18px 0 44px rgba(20,30,60,.2);
+  transform:translateX(103%);transition:transform .28s ease;
+  overflow-y:auto;padding:clamp(10px,1.8vh,20px) clamp(12px,1.8vw,24px) 60px;
+  text-align:left;
+}
+#panel.on{transform:none}
+.panelBar{display:flex;align-items:center;justify-content:space-between;gap:10px;position:sticky;top:-10px;background:#fff;padding:6px 0 8px;z-index:2}
+.panelBar h2{margin:0;font-size:clamp(16px,2.6vh,26px)}
+.sec{border-top:2px dashed var(--line);padding:clamp(7px,1.2vh,16px) 0}
+.sec h3{margin:0 0 6px;font-size:clamp(13px,2vh,19px)}
+.hint{color:var(--ink2);font-weight:700;font-size:clamp(11px,1.7vh,15px);line-height:1.35}
+.chips{display:flex;flex-wrap:wrap;gap:clamp(4px,.7vw,9px);align-items:center}
+.chiplet{
+  width:clamp(36px,6.4vh,56px);height:clamp(36px,6.4vh,56px);border-radius:14px;
+  background:#f4f8ff;border:2px solid #dde8f7;font-weight:900;
+  font-size:clamp(15px,2.6vh,25px);display:grid;place-items:center;transition:transform .12s;
+}
+.chiplet:active{transform:scale(.92)}
+.chiplet.on{background:linear-gradient(180deg,#8fd3ff,#4aa3ef);color:#fff;border-color:#3d94df;box-shadow:0 3px 0 #2f80c4}
+.glabel{font-weight:900;color:var(--ink2);font-size:clamp(11px,1.7vh,15px);min-width:64px}
+.pill{
+  padding:.35em .9em;border-radius:999px;background:#f2f6fd;border:2px solid #e2eaf7;
+  font-weight:900;font-size:clamp(11px,1.9vh,17px);
+}
+.pill.on{background:linear-gradient(180deg,#ffd97a,#ffc23d);border-color:#e9ab1c;color:#5a3d00}
+.sw{display:flex;align-items:center;justify-content:space-between;gap:10px;font-weight:800;font-size:clamp(12px,1.9vh,18px);padding:3px 0}
+.toggle{width:clamp(52px,8vh,64px);height:clamp(28px,4.4vh,34px);border-radius:999px;background:#dfe6f0;position:relative;transition:.2s;flex:0 0 auto}
+.toggle::after{content:"";position:absolute;top:3px;left:3px;width:calc(100% - 6px - 14px);height:calc(100% - 6px);border-radius:50%;background:#fff;transition:.2s;box-shadow:0 2px 6px rgba(0,0,0,.22)}
+.toggle.on{background:#5ecf8b}
+.toggle.on::after{left:calc(100% - 3px - (100% - 6px - 14px))}
+textarea{
+  width:100%;min-height:clamp(90px,16vh,170px);border-radius:14px;border:3px solid #dde8f7;
+  padding:10px;font-family:inherit;font-weight:700;font-size:16px;resize:vertical;color:var(--ink);
+  -webkit-user-select:text;user-select:text;
+}
+.countsbox{display:flex;flex-wrap:wrap;gap:6px}
+.countsbox span{background:#f2f8ff;border:2px solid #e2eaf7;border-radius:999px;padding:.2em .8em;font-weight:900;font-size:clamp(11px,1.7vh,15px);color:#3c5b86}
+
+/* ---------- Bildirim & döndürme ---------- */
+#toast{
+  position:fixed;left:50%;bottom:20px;transform:translate(-50%,150%);
+  background:rgba(30,45,75,.94);color:#fff;padding:.7em 1.4em;border-radius:999px;
+  font-weight:900;z-index:300;transition:transform .3s;font-size:clamp(12px,2vh,19px);
+  max-width:92vw;text-align:center;pointer-events:none;
+}
+#toast.on{transform:translate(-50%,0)}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:120}
+#rotate{
+  position:fixed;inset:0;display:none;place-items:center;z-index:400;
+  background:linear-gradient(180deg,#eaf7ff,#f6f0ff);text-align:center;padding:24px;
+  font-weight:900;font-size:clamp(15px,2.6vh,22px);
+}
+@media (orientation:portrait) and (max-width:860px){ #rotate.show{display:grid} }
+@media (max-width:980px){
+  .letters-mini{display:none}
+  .cards{grid-template-columns:repeat(2,1fr)}
+  .brand .btxt{display:none}
+}
+@media (max-height:520px){
+  .gamecard .dsc{display:none}
+}
+body.hide-pics .bemoji{display:none}
+body.hide-pics .mback.harfler{color:inherit}
+
+/* =====================================================================
+   ERİŞİLEBİLİRLİK VE YAZI TİPİ EKLERİ
+   ===================================================================== */
+/* TTKB Dik Temel Abece cihazda kuruluysa kullanılır (assets/font.css).
+   Kurulu değilse okunaklı sistem yazı tipine düşer; font dosyası dağıtılmaz. */
+body,button,select,textarea,input{font-family:var(--dik-temel,"Segoe UI",system-ui,-apple-system,"Noto Sans",sans-serif)}
+
+/* Kapalı kartın büyük harf yüzü: küçük harfle aynı ağırlıkta okunur */
+.mback.buyuk{letter-spacing:.04em}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{
+    animation-duration:.001ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.001ms !important;
+    scroll-behavior:auto !important;
+  }
+  .db,.cloud,.sun,.flyballoon .bob{animation:none !important}
+}

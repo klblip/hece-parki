@@ -1,0 +1,13 @@
+﻿Hece Parki - kurulum paketi
+Surum       : 1.0
+Tarih       : 2026-10-22
+Dosya sayisi: 32
+Acik boyut  : 0.43 MB
+Zip boyutu  : 0.14 MB
+SHA256      : 6F8107D33ADB32B5FD0E34FA4C96ECC84DD964E1E91054BDEE1423DB1C99213F
+
+Kaynak testleri: 86/86 (test/test.html, yerel sunucu)
+Paket testi    : sunucu.ps1 HTTP + file:// headless render (Edge/Chrome)
+
+Kurulum: KURULUM.md
+Gizlilik: GIZLILIK.md

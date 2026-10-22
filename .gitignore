@@ -1,0 +1,13 @@
+# Windows / editor artıkları
+Thumbs.db
+Desktop.ini
+*.log
+*.tmp
+.vscode/
+.idea/
+
+# Yalnız yerel analiz ekran görüntüleri (siteye girmez, telif riski)
+okuyorum-analiz/ekrangoruntuleri/
+
+# Geçici test çıktıları
+test/*.out

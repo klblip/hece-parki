@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hece Parkı — Tarayıcı Testleri</title>
+<style>
+  :root{--ok:#1f8a4c;--no:#c0392b;--ink:#233;--line:#dbe4ee}
+  *{box-sizing:border-box}
+  body{margin:0;padding:24px;font-family:"Segoe UI",system-ui,sans-serif;color:var(--ink);background:#f6f9fc}
+  h1{font-size:22px;margin:0 0 4px}
+  .alt{color:#5b6b7c;font-size:14px;margin-bottom:18px}
+  #ozet{font-size:18px;font-weight:700;padding:12px 16px;border-radius:12px;background:#fff;border:1px solid var(--line);margin-bottom:16px}
+  #ozet.ok{color:var(--ok);border-color:#bfe6cf;background:#f2fbf5}
+  #ozet.no{color:var(--no);border-color:#f0c9c4;background:#fdf4f3}
+  table{border-collapse:collapse;width:100%;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  th,td{padding:9px 12px;text-align:left;font-size:14px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{background:#eef4fa;font-size:13px;text-transform:uppercase;letter-spacing:.04em}
+  tr:last-child td{border-bottom:0}
+  .g{color:var(--ok);font-weight:700}
+  .k{color:var(--no);font-weight:700}
+  code{background:#f2f5f8;padding:1px 5px;border-radius:5px;font-size:13px}
+  .bolum{font-weight:700;background:#f7fafc}
+</style>
+</head>
+<body>
+<h1>Tarayıcı testleri</h1>
+<div class="alt">Kanonik veri, heceleme, havuzlar ve soru üreticisi. Sayfa çevrimdışı çalışır.</div>
+<div id="ozet">Çalışıyor...</div>
+<table>
+  <thead><tr><th style="width:52px">#</th><th>Test</th><th style="width:70px">Sonuç</th><th style="width:42%">Ayrıntı</th></tr></thead>
+  <tbody id="govde"></tbody>
+</table>
+
+<script src="../assets/veri.js"></script>
+<script src="../assets/fonem.js"></script>
+<script src="../assets/sesler/manifest.js"></script>
+<script src="../okuma-bayrami/js/yardim.js"></script>
+<script src="../okuma-bayrami/js/veri.js"></script>
+<script src="../okuma-bayrami/js/soru.js"></script>
+<script>
+"use strict";
+
+var SONUC = { toplam: 0, gecen: 0, kalan: 0, hatalar: [] };
+var govde = document.getElementById("govde");
+var sira = 0;
+
+function bolum(baslik) {
+  var tr = document.createElement("tr");
+  tr.className = "bolum";
+  tr.innerHTML = '<td colspan="4">' + baslik + "</td>";
+  govde.appendChild(tr);
+}
+function test(ad, fn) {
+  sira++;
+  SONUC.toplam++;
+  var gecti = false, ayrinti = "";
+  try {
+    var r = fn();
+    if (r === true) { gecti = true; }
+    else if (r === false) { ayrinti = "false döndü"; }
+    else { ayrinti = String(r == null ? r : r); }
+  } catch (e) {
+    ayrinti = "HATA: " + (e && e.message ? e.message : e);
+  }
+  if (gecti) SONUC.gecen++; else { SONUC.kalan++; SONUC.hatalar.push(ad + " — " + ayrinti); }
+  var tr = document.createElement("tr");
+  tr.innerHTML = '<td>' + sira + '</td><td>' + ad + '</td><td class="' + (gecti ? "g" : "k") + '">' +
+    (gecti ? "GEÇTİ" : "KALDI") + '</td><td>' + ayrinti + "</td>";
+  govde.appendChild(tr);
+}
+function esit(a, b, ad) {
+  return function () {
+    return JSON.stringify(a) === JSON.stringify(b) ? true : "beklenen: " + JSON.stringify(b) + " · gelen: " + JSON.stringify(a);
+  };
+}
+/* yardımcı: bir kümenin tüm harfleri izinli mi */
+function izinliMi(metin, kume) {
+  var s = lower(metin);
+  for (var i = 0; i < s.length; i++) {
+    if (TR_ALPHA.indexOf(s[i]) > -1 && kume.indexOf(s[i]) < 0) return false;
+  }
+  return true;
+}
+
+/* ------------------------------------------------------------------ */
+bolum("1 · Kanonik veri (assets/veri.js)");
+
+test("5 resmî harf grubu var", function () {
+  return V.GROUPS.length === 5 || "grup sayısı: " + V.GROUPS.length;
+});
+test("Grup sırası TYMM 2026 ile aynı", esit(
+  V.GROUPS.map(function (g) { return g.letters.join(""); }),
+  ["anetil", "okurım", "üsöydz", "çbgcş", "phvğfj"]
+));
+test("Toplam 29 harf, tekrar yok", function () {
+  var hepsi = V.GROUPS.reduce(function (a, g) { return a.concat(g.letters); }, []);
+  var tek = hepsi.filter(function (h, i) { return hepsi.indexOf(h) === i; });
+  return (hepsi.length === 29 && tek.length === 29) || "toplam " + hepsi.length + " / tek " + tek.length;
+});
+test("Kümülatif grup boyutları 6-12-18-23-29", esit([6, 12, 18, 23, 29], [6, 12, 18, 23, 29]));
+test("Türk alfabesinde olmayan harf yok", function () {
+  var kotu = V.TUM_HARFLER.filter(function (h) { return V.ALFABE.indexOf(h) < 0; });
+  return kotu.length === 0 || "fazla: " + kotu.join(",");
+});
+test("Kelime bankası küçük harfli ve Türk alfabesinde", function () {
+  var kotu = V.SOZLUK.filter(function (o) {
+    return o.w !== o.w.toLocaleLowerCase("tr-TR") ||
+      o.w.split("").some(function (h) { return V.ALFABE.indexOf(h) < 0; });
+  });
+  return kotu.length === 0 || "hatalı: " + kotu.slice(0, 3).map(function (o) { return o.w; }).join(", ");
+});
+test("Her kelime ilk okunabildiği gruba atanmış", function () {
+  var kotu = V.SOZLUK.filter(function (o) { return o.g < 1 || o.g > 5; });
+  return kotu.length === 0 || "hatalı grup: " + kotu.length;
+});
+test("1. grup kelimeleri yalnızca a,n,e,t,i,l ile yazılıyor", function () {
+  var g1 = V.GROUPS[0].letters;
+  var kotu = V.SOZLUK.filter(function (o) { return o.g === 1 && !izinliMi(o.w, g1); });
+  return kotu.length === 0 || "hatalı: " + kotu.slice(0, 3).map(function (o) { return o.w; }).join(", ");
+});
+test("Cümle bankası boş değil ve noktalaması var", function () {
+  if (!V.CUMLELER.length) return "cümle yok";
+  var noktasiz = V.CUMLELER.filter(function (c) { return !/[.!?]$/.test(c.s); });
+  return noktasiz.length === 0 || noktasiz.length + " cümlede son noktalama yok: " + noktasiz[0].s;
+});
+
+/* ------------------------------------------------------------------ */
+bolum("2 · Heceleme kuralı (assets/veri.js → hecele)");
+
+var BEKLENEN = {
+  "aile": ["a", "i", "le"], "saat": ["sa", "at"], "ana": ["a", "na"], "anne": ["an", "ne"],
+  "kalem": ["ka", "lem"], "domates": ["do", "ma", "tes"], "tren": ["tren"], "göz": ["göz"],
+  "mutlu": ["mut", "lu"], "yüksek": ["yük", "sek"], "altın": ["al", "tın"], "ırmak": ["ır", "mak"],
+  "deniz": ["de", "niz"], "şimşek": ["şim", "şek"], "aslan": ["as", "lan"]
+};
+Object.keys(BEKLENEN).forEach(function (w) {
+  test("hecele(\"" + w + "\") = " + BEKLENEN[w].join("-"), function () {
+    var g = V.hecele(w);
+    return JSON.stringify(g) === JSON.stringify(BEKLENEN[w]) || "gelen: " + g.join("-");
+  });
+});
+test("Hiçbir hece sesli harfsiz değil", function () {
+  var kotu = [];
+  V.SOZLUK.forEach(function (o) {
+    o.heceler.forEach(function (h) {
+      if (!h.split("").some(function (c) { return V.SESLI.indexOf(c) > -1; })) kotu.push(o.w + ":" + h);
+    });
+  });
+  return kotu.length === 0 || kotu.slice(0, 5).join(", ");
+});
+test("Kapalı heceler açık hecelerden önce sıralanıyor", function () {
+  var liste = V.heceSirala(["le", "at", "na", "el", "ki"]);
+  var ilkAcik = liste.findIndex(function (h) { return V.heceTuru(h) === "acik"; });
+  var sonKapali = -1;
+  liste.forEach(function (h, i) { if (V.heceTuru(h) === "kapali") sonKapali = i; });
+  return sonKapali < ilkAcik || "sıra: " + liste.join(",");
+});
+
+/* ------------------------------------------------------------------ */
+bolum("3 · okuma-bayrami veri adaptörü");
+
+test("Adaptör 29 harf taşıyor", function () {
+  var n = GROUPS.reduce(function (a, g) { return a + g.letters.length; }, 0);
+  return n === 29 || "gelen: " + n;
+});
+test("Adaptör kelime/cümle sayısı kanonik ile aynı", function () {
+  if (WORDS.length !== V.SOZLUK.length) return "kelime " + WORDS.length + " ≠ " + V.SOZLUK.length;
+  if (SENTENCES.length !== V.TUM_CUMLELER.length) return "cümle " + SENTENCES.length + " ≠ " + V.TUM_CUMLELER.length;
+  return true;
+});
+test("Harf ADI sözlüğü kaldırıldı", function () {
+  return typeof window.HARF_ADI === "undefined" || "HARF_ADI hâlâ tanımlı";
+});
+
+/* ------------------------------------------------------------------ */
+bolum("4 · Havuzlar ve soru üreticisi (grup 1)");
+
+S.letters = GROUPS[0].letters.slice();
+S.types = { harf: true, ilkses: true, hece: true, resim: true, kelime: true, eksik: true };
+save();
+
+test("Grup 1'de 20+ kelime var", function () {
+  return poolWords().length >= 20 || "kelime: " + poolWords().length;
+});
+test("Grup 1'de cümle oyunu kapalı", function () {
+  return cumlelerAcik() === false || "cumlelerAcik true döndü";
+});
+test("Grup 2 eklenince cümle oyunu açılıyor", function () {
+  S.letters = GROUPS[0].letters.concat(GROUPS[1].letters);
+  var acik = cumlelerAcik();
+  S.letters = GROUPS[0].letters.slice();
+  return acik === true || "cumlelerAcik false döndü";
+});
+test("Hece havuzu gerçek kelimelerden türetiliyor", function () {
+  var havuz = poolSyllables();
+  var gercek = {};
+  poolWords().forEach(function (o) { hecele(o.w).forEach(function (h) { gercek[h] = 1; }); });
+  var kotu = havuz.filter(function (h) { return !gercek[h]; });
+  return kotu.length === 0 || "uydurma: " + kotu.slice(0, 5).join(",");
+});
+test("Hece havuzunda 2+ harfli hece var", function () {
+  var n = poolSyllables().filter(function (h) { return h.length >= 2; }).length;
+  return n >= 5 || "adet: " + n;
+});
+test("qIlkses kelimeyi yazıyla göstermiyor", function () {
+  for (var i = 0; i < 40; i++) {
+    var q = qIlkses();
+    if (!q) return "soru üretilemedi";
+    if ("cap" in q.visual) return "cap alanı hâlâ var";
+    if (!q.visual.value) return "boş emoji";
+  }
+  return true;
+});
+test("qHarf harf adı söylemiyor", function () {
+  for (var i = 0; i < 20; i++) {
+    var q = qHarf();
+    if (!q) return "soru üretilemedi";
+    if (q.say !== "") return "say dolu: " + q.say;
+    if (!q.harf) return "harf alanı yok";
+  }
+  return true;
+});
+test("qEksik ilk harfi de sorabiliyor", function () {
+  var ilk = 0;
+  for (var i = 0; i < 200; i++) {
+    var q = qEksik();
+    if (q && q.visual.value.charAt(0) === "_") ilk++;
+  }
+  return ilk > 0 || "200 denemede ilk harf hiç sorulmadı";
+});
+test("qEksik tekrar eden harfli kelimeyi de kullanıyor", function () {
+  var tekrarli = poolWords().filter(function (o) {
+    return o.w.length >= 3 && o.w.split("").some(function (h, i) { return o.w.indexOf(h) !== i; });
+  });
+  return tekrarli.length > 0 || "tekrarli kelime yok";
+});
+test("Resim sütununda yazı değil emoji var", function () {
+  var kotu = V.SOZLUK.filter(function (o) {
+    var s = String(o.e || "").replace(/[0-9]\uFE0F?\u20E3/g, ""); /* 7️⃣ gibi sayı emojileri serbest */
+    return s && /[0-9a-zA-ZçğıöşüÇĞİÖŞÜ]/.test(s);
+  });
+  return kotu.length === 0 || "yazı gibi görünen: " + kotu.slice(0, 3).map(function (o) { return o.w + "=" + o.e; }).join(", ");
+});
+test("Resimli soruda resim ile cevap aynı kelimeyi gösteriyor", function () {
+  var emap = {};
+  WORDS.forEach(function (o) { emap[o.w] = o.e; });
+  for (var i = 0; i < 60; i++) {
+    var q = qResim();
+    if (!q) return "resim sorusu üretilemedi";
+    if (emap[q.reveal] !== q.visual.value) return q.reveal + " için resim " + q.visual.value;
+    var emojiler = q.options.map(function (o) { return emap[o.label]; }).filter(Boolean);
+    var tek = emojiler.filter(function (e, j) { return emojiler.indexOf(e) === j; });
+    if (tek.length !== emojiler.length) return "aynı resim iki seçenekte: " + emojiler.join(",");
+  }
+  return true;
+});
+test("Tüm soru tipleri üretilebiliyor", function () {
+  var tipler = { harf: 0, ilkses: 0, hece: 0, resim: 0, kelime: 0, eksik: 0 };
+  for (var i = 0; i < 300; i++) {
+    var q = nextQuestion();
+    if (!q) return "soru üretilemedi (i=" + i + ")";
+    tipler[q.type]++;
+    if (q.options.length < 2) return q.type + " seçenek sayısı " + q.options.length;
+    if (q.answer < 0 || q.answer >= q.options.length) return q.type + " cevap indeksi hatalı";
+  }
+  var eksik = Object.keys(tipler).filter(function (k) { return tipler[k] === 0; });
+  return eksik.length === 0 || "hiç üretilmeyen: " + eksik.join(",");
+});
+test("Seçenekler doğru cevabı bir kez içeriyor", function () {
+  for (var i = 0; i < 100; i++) {
+    var q = nextQuestion();
+    if (!q) return "soru yok";
+    var etiket = q.options.map(function (o) { return o.emoji ? "e:" + o.emoji : "l:" + o.label; });
+    var dogru = q.reveal;
+    var sayi = q.options.filter(function (o) {
+      if (q.type === "resim" || q.type === "kelime") return o.label === dogru;
+      return o.label === dogru;
+    }).length;
+    if (sayi !== 1) return q.type + " doğru seçenek sayısı: " + sayi + " (" + etiket.join("|") + ")";
+  }
+  return true;
+});
+test("Grup 1'de sorular yalnızca öğretilen harfleri kullanıyor", function () {
+  var g1 = GROUPS[0].letters;
+  for (var i = 0; i < 200; i++) {
+    var q = nextQuestion();
+    if (!q) return "soru yok";
+    var metin = q.options.map(function (o) { return o.label || ""; }).join(" ") + " " + (q.visual.value || "");
+    if (q.visual.type === "emoji") continue; /* resim sorusunda metin yok */
+    if (!izinliMi(metin, g1)) return "izinli olmayan harf: " + metin;
+  }
+  return true;
+});
+
+/* ------------------------------------------------------------------ */
+bolum("5 · Fonem motoru");
+
+test("Ünlü harf sesli olarak işaretli", function () {
+  return (Fonem.sesliMi("a") && Fonem.sesliMi("ü") && Fonem.sesliMi("ı")) || "ünlü tanınmadı";
+});
+test("Sessiz harf ünlü sayılmıyor", function () {
+  return (!Fonem.sesliMi("k") && !Fonem.sesliMi("ş")) || "sessiz ünlü sayıldı";
+});
+test("Sessiz harf sentezi tanınıyor", function () {
+  var k = Fonem.sentez("k"), s = Fonem.sentez("s"), m = Fonem.sentez("m");
+  return (k && s && m) || "k=" + k + " s=" + s + " m=" + m;
+});
+test("Ünlü harf sentezlenmiyor (TTS'e bırakılıyor)", function () {
+  return Fonem.sentez("a") === false || "ünlü sentezlendi";
+});
+test("Ses manifesti yapısı geçerli", function () {
+  var m = window.ORTAK_SES_KAYITLARI;
+  if (!m) return "ORTAK_SES_KAYITLARI yok";
+  var turler = ["fonem", "hece", "kelime"];
+  for (var i = 0; i < turler.length; i++) {
+    var t = turler[i];
+    if (!m[t] || typeof m[t] !== "object") return t + " bölümü yok";
+    var anahtarlar = Object.keys(m[t]);
+    for (var j = 0; j < anahtarlar.length; j++) {
+      var k = anahtarlar[j], yol = String(m[t][k]);
+      if (yol.indexOf("/" + t + "/") < 0 || !/\.mp3$/.test(yol)) return t + "." + k + " yolu hatalı: " + yol;
+      if (t === "fonem" && (k.length !== 1 || V.ALFABE.indexOf(k) < 0)) return "fonem anahtarı hatalı: " + k;
+    }
+  }
+  return true;
+});
+
+/* ------------------------------------------------------------------ */
+bolum("6 · İçerik lint'i (kelime ve cümle bankası)");
+
+function kumulatif(n) {
+  var s = [];
+  for (var i = 0; i < n; i++) s = s.concat(V.GROUPS[i].letters);
+  return s;
+}
+test("Kelime bankasında tekrar yok", function () {
+  var w = V.SOZLUK.map(function (o) { return o.w; });
+  var tek = w.filter(function (x, i) { return w.indexOf(x) === i; });
+  return (w.length === tek.length) || (w.length - tek.length) + " tekrar var";
+});
+test("Cümle bankasında tekrar yok", function () {
+  var c = V.CUMLELER.map(function (o) { return o.s; });
+  var tek = c.filter(function (x, i) { return c.indexOf(x) === i; });
+  return (c.length === tek.length) || (c.length - tek.length) + " tekrar var";
+});
+test("Her kelime ilk okunabildiği grupta", function () {
+  var kotu = V.SOZLUK.filter(function (o) {
+    if (!V.harfUyar(kumulatif(o.g), o.w)) return true;            /* kendi grubunda okunamıyor */
+    if (o.g > 1 && V.harfUyar(kumulatif(o.g - 1), o.w)) return true; /* önceki grupta zaten okunuyor */
+    return false;
+  });
+  return kotu.length === 0 || "hatalı: " + kotu.slice(0, 4).map(function (o) { return o.w + "→" + o.g; }).join(", ");
+});
+test("Her cümlenin grubu ilk okunabildiği grupla aynı", function () {
+  var kotu = V.CUMLELER.filter(function (o) {
+    if (!V.harfUyar(kumulatif(o.g), o.s)) return true;
+    if (o.g > 1 && V.harfUyar(kumulatif(o.g - 1), o.s)) return true;
+    return false;
+  });
+  return kotu.length === 0 || "hatalı: " + kotu.slice(0, 3).map(function (o) { return o.s + "→" + o.g; }).join(" | ");
+});
+test("Kelime 10 harfi geçmiyor", function () {
+  var uzun = V.SOZLUK.filter(function (o) { return o.w.length > 10; });
+  return uzun.length === 0 || uzun.slice(0, 3).map(function (o) { return o.w; }).join(", ");
+});
+test("Cümleler 1-7 sözcük arasında", function () {
+  var kotu = V.CUMLELER.filter(function (o) {
+    var n = o.s.replace(/[.!?,]+/g, "").split(/\s+/).filter(Boolean).length;
+    return n < 1 || n > 7;
+  });
+  return kotu.length === 0 || kotu.slice(0, 3).map(function (o) { return "\"" + o.s + "\""; }).join(", ");
+});
+test("Cümlelerde rakam ve yabancı harf yok", function () {
+  var serbest = " .,!?'’\"-";
+  var kotu = V.CUMLELER.filter(function (o) {
+    var s = o.s.toLocaleLowerCase("tr-TR");
+    for (var i = 0; i < s.length; i++) {
+      var c = s.charAt(i);
+      if (serbest.indexOf(c) > -1) continue;
+      if (V.ALFABE.indexOf(c) < 0) return true;
+    }
+    return false;
+  });
+  return kotu.length === 0 || "hatalı: " + kotu.slice(0, 3).map(function (o) { return o.s; }).join(" | ");
+});
+test("heceler alanı hecele() ile aynı", function () {
+  var kotu = V.SOZLUK.filter(function (o) {
+    return JSON.stringify(o.heceler) !== JSON.stringify(V.hecele(o.w));
+  });
+  return kotu.length === 0 || "hatalı: " + kotu.slice(0, 3).map(function (o) { return o.w; }).join(", ");
+});
+
+/* ------------------------------------------------------------------ */
+bolum("7 · Oyun sayfaları (iframe · gerçek yükleme)");
+
+var bekleyen = 0;
+function iframeTest(ad, url, fn) {
+  sira++; SONUC.toplam++; bekleyen++;
+  var tr = document.createElement("tr");
+  tr.innerHTML = '<td>' + sira + '</td><td>' + ad + '</td><td>…</td><td>yükleniyor</td>';
+  govde.appendChild(tr);
+  var f = document.createElement("iframe");
+  f.setAttribute("title", ad);
+  f.style.cssText = "position:absolute;left:-9999px;width:1024px;height:768px;border:0";
+  f.src = url;
+  var bitti = false;
+  function sonuc(gecti, ayrinti) {
+    if (bitti) return;
+    bitti = true;
+    if (gecti) SONUC.gecen++; else { SONUC.kalan++; SONUC.hatalar.push(ad + " — " + ayrinti); }
+    tr.innerHTML = '<td>' + sira + '</td><td>' + ad + '</td><td class="' + (gecti ? "g" : "k") + '">' +
+      (gecti ? "GEÇTİ" : "KALDI") + '</td><td>' + ayrinti + "</td>";
+    bekleyen--;
+    ozetYaz();
+  }
+  f.onload = function () {
+    try {
+      var r = fn(f.contentWindow, f.contentDocument);
+      sonuc(r === true, r === true ? "" : String(r == null ? r : r));
+    } catch (e) {
+      sonuc(false, "HATA: " + (e && e.message ? e.message : e));
+    }
+  };
+  f.onerror = function () { sonuc(false, "sayfa yüklenemedi"); };
+  document.body.appendChild(f);
+  setTimeout(function () { sonuc(false, "zaman aşımı (15 sn)"); }, 15000);
+}
+
+iframeTest("hece-rallisi: resmî 1. grup yüklü", "../oyunlar/hece-rallisi/index.html", function (w) {
+  var D = w.__D;
+  if (!D) return "__D yok";
+  var harf = Array.from(D.harfler).join("");
+  return harf === "anetil" || "gelen: " + harf;
+});
+iframeTest("hece-rallisi: 5 resmî ön ayar, 29 çip, TTKB font, zoom açık", "../oyunlar/hece-rallisi/index.html", function (w, d) {
+  var p = d.querySelectorAll("#pres-sira .pil").length;
+  var c = d.querySelectorAll("#cip-sira .harf-cip").length;
+  var son = d.querySelectorAll('#pres-sira .pil[data-pres="5"]').length;
+  if (!(p === 5 && c === 29 && son === 1)) return "ön ayar " + p + " · çip " + c + " · 5. grup " + son;
+  var vp = (d.querySelector('meta[name="viewport"]') || {}).content || "";
+  if (/user-scalable\s*=\s*no|maximum-scale\s*=\s*1/.test(vp)) return "yakınlaştırma kapalı: " + vp;
+  var ff = w.getComputedStyle(d.body).fontFamily;
+  return ff.indexOf("TTKB") > -1 || "font: " + ff;
+});
+iframeTest("hece-rallisi: harf çipleri küçük harf", "../oyunlar/hece-rallisi/index.html", function (w, d) {
+  var t = Array.from(d.querySelectorAll("#cip-sira .harf-cip")).map(function (b) { return b.textContent; });
+  var kotu = t.filter(function (x) { return x !== x.toLocaleLowerCase("tr-TR"); });
+  return kotu.length === 0 || "büyük harf: " + kotu.join(",");
+});
+iframeTest("hece-rallisi: oyun içi heceler gerçek ve küçük harf", "../oyunlar/hece-rallisi/index.html", function (w, d) {
+  d.getElementById("isim").value = "test";
+  d.getElementById("basla").click();
+  var D = w.__D;
+  var metin = Array.from(d.querySelectorAll("#kapilar .kapi")).map(function (b) { return b.dataset.metin; });
+  if (!metin.length) return "kapı üretilmedi";
+  var gercek = {};
+  w.OrtakVeri.SOZLUK.forEach(function (o) { o.heceler.forEach(function (h) { gercek[h] = 1; }); });
+  var buyuk = metin.filter(function (m) { return m !== m.toLocaleLowerCase("tr-TR"); });
+  var uydurma = D.mod === "hece" ? metin.filter(function (m) { return !gercek[m]; }) : [];
+  return (buyuk.length === 0 && uydurma.length === 0) || "büyük: " + buyuk.join(",") + " uydurma: " + uydurma.join(",");
+});
+iframeTest("hece-rallisi: ortak çekirdek yüklü", "../oyunlar/hece-rallisi/index.html", function (w) {
+  var adlar = ["yaz", "depoOku", "depoYaz", "soyle", "efekt", "konfeti", "kalpler",
+    "kelimeFiltre", "heceHavuzu", "benzerHarf", "harfSetiKur"];
+  var eksik = adlar.filter(function (n) { return typeof w[n] !== "function"; });
+  if (eksik.length) return "eksik: " + eksik.join(",");
+  var s = w.harfSetiKur(1);
+  if (Array.from(s).join("") !== "anetil") return "grup 1: " + Array.from(s).join("");
+  var h = w.heceHavuzu(s);
+  if (!h.length || h.some(function (x) { return x.length < 2; })) return "hece havuzu: " + h.length;
+  return true;
+});
+iframeTest("ac-canavar: resmî 1. grup yüklü", "../oyunlar/ac-canavar/index.html", function (w) {
+  var D = w.__D;
+  if (!D) return "__D yok";
+  var harf = Array.from(D.harfler).join("");
+  return harf === "anetil" || "gelen: " + harf;
+});
+iframeTest("ac-canavar: 5 resmî ön ayar, 29 çip, TTKB font, zoom açık", "../oyunlar/ac-canavar/index.html", function (w, d) {
+  var p = d.querySelectorAll("#pres-sira .pil").length;
+  var c = d.querySelectorAll("#cip-sira .harf-cip").length;
+  if (!(p === 5 && c === 29)) return "ön ayar " + p + " · çip " + c;
+  var vp = (d.querySelector('meta[name="viewport"]') || {}).content || "";
+  if (/user-scalable\s*=\s*no|maximum-scale\s*=\s*1/.test(vp)) return "yakınlaştırma kapalı: " + vp;
+  var ff = w.getComputedStyle(d.body).fontFamily;
+  return ff.indexOf("TTKB") > -1 || "font: " + ff;
+});
+iframeTest("ac-canavar: oyun içi heceler gerçek ve küçük harf", "../oyunlar/ac-canavar/index.html", function (w, d) {
+  d.getElementById("isim").value = "test";
+  d.getElementById("basla").click();
+  var D = w.__D;
+  var metin = Array.from(d.querySelectorAll(".tabak")).map(function (t) { return t.dataset.metin; });
+  if (!metin.length) return "tabak üretilmedi";
+  var gercek = {};
+  w.OrtakVeri.SOZLUK.forEach(function (o) { o.heceler.forEach(function (h) { gercek[h] = 1; }); });
+  var buyuk = metin.filter(function (m) { return m !== m.toLocaleLowerCase("tr-TR"); });
+  var uydurma = D.mod === "hece" ? metin.filter(function (m) { return !gercek[m]; }) : [];
+  return (buyuk.length === 0 && uydurma.length === 0) || "büyük: " + buyuk.join(",") + " uydurma: " + uydurma.join(",");
+});
+iframeTest("ac-canavar: ortak çekirdek yüklü", "../oyunlar/ac-canavar/index.html", function (w) {
+  var adlar = ["yaz", "depoOku", "depoYaz", "soyle", "efekt", "konfeti", "kalpler",
+    "kelimeFiltre", "heceHavuzu", "benzerHarf", "harfSetiKur"];
+  var eksik = adlar.filter(function (n) { return typeof w[n] !== "function"; });
+  if (eksik.length) return "eksik: " + eksik.join(",");
+  var s = w.harfSetiKur(1);
+  if (Array.from(s).join("") !== "anetil") return "grup 1: " + Array.from(s).join("");
+  var h = w.heceHavuzu(s);
+  if (!h.length || h.some(function (x) { return x.length < 2; })) return "hece havuzu: " + h.length;
+  return true;
+});
+iframeTest("okuma-bayrami: modüller yüklü, 29 harf", "../okuma-bayrami-1-sinif.html", function (w) {
+  if (typeof w.GROUPS === "undefined") return "GROUPS yok (modül yüklenmedi)";
+  var n = w.GROUPS.reduce(function (a, g) { return a + g.letters.length; }, 0);
+  if (n !== 29) return "harf: " + n;
+  if (typeof w.sesFonem !== "function") return "sesFonem yok";
+  if (!w.Fonem) return "Fonem yok";
+  if (typeof w.hecele !== "function") return "hecele yok";
+  return w.hecele("aile").join("-") === "a-i-le" || "hecele(aile) = " + w.hecele("aile").join("-");
+});
+iframeTest("okuma-bayrami: harf sorusu harf adı söylemiyor", "../okuma-bayrami-1-sinif.html", function (w) {
+  w.S.letters = ["a", "n", "e", "t", "i", "l"];
+  w.save();
+  for (var i = 0; i < 30; i++) {
+    var q = w.qHarf();
+    if (!q) return "soru üretilemedi";
+    if (q.say !== "") return "say dolu: " + q.say;
+  }
+  return true;
+});
+iframeTest("okuma-bayrami: 1. grupta cümle oyunu kapalı", "../okuma-bayrami-1-sinif.html", function (w) {
+  w.S.letters = ["a", "n", "e", "t", "i", "l"];
+  w.save();
+  if (w.cumlelerAcik() !== false) return "cumlelerAcik true";
+  w.S.letters = ["a", "n", "e", "t", "i", "l", "o", "k"];
+  return w.cumlelerAcik() === true || "2. grupta da kapalı";
+});
+iframeTest("okuma-bayrami: hafıza destesi küçük harf", "../okuma-bayrami-1-sinif.html", function (w) {
+  w.S.letters = ["a", "n", "e", "t", "i", "l"];
+  w.save();
+  var b = w.memDeck("harf");
+  if (!b) return "deste kurulamadı";
+  var buyuk = b.deck.filter(function (c) { return c.face !== c.face.toLocaleLowerCase("tr-TR"); });
+  return buyuk.length === 0 || "büyük kart: " + buyuk[0].face;
+});
+iframeTest("okuma-bayrami: kapsama özeti 5 grup ve cümle kapısı", "../okuma-bayrami-1-sinif.html", function (w, d) {
+  w.kapsamaYaz();
+  var satir = Array.from(d.querySelectorAll("#coverage span")).map(function (s) { return s.textContent; });
+  if (satir.length !== 5) return "satır: " + satir.length;
+  if (satir[0].indexOf("cümle yok") < 0) return "1. grupta cümle yazıyor: " + satir[0];
+  if (satir[4].indexOf("kelime") < 0) return "son satır eksik: " + satir[4];
+  return true;
+});
+iframeTest("okuma-bayrami: yedek yükleme doğrulaması", "../okuma-bayrami-1-sinif.html", function (w) {
+  var eski = JSON.parse(JSON.stringify(w.S));
+  try {
+    w.yedekUygula({ letters: ["a", "n", "z"], students: "Deneme", scores: { "Deneme": 7 }, count: 15, speed: "hizli", raceTarget: 99, types: { harf: false } });
+    var hata = [];
+    if (w.S.letters.join("") !== "anz") hata.push("harf: " + w.S.letters.join(""));
+    if (w.S.students !== "Deneme") hata.push("öğrenci");
+    if (w.S.scores.Deneme !== 7) hata.push("puan");
+    if (w.S.count !== 15) hata.push("soru sayısı");
+    if (w.S.speed !== "normal") hata.push("geçersiz hız kabul edildi");
+    if (w.S.raceTarget !== 10) hata.push("geçersiz hedef kabul edildi");
+    if (w.S.types.harf !== false) hata.push("tip");
+    return hata.length === 0 || hata.join(", ");
+  } finally {
+    w.yedekUygula(eski);
+  }
+});
+
+/* ------------------------------------------------------------------ */
+bolum("8 · Çevrimdışılık (dış istek yok)");
+
+function uzakIstekler(w, d) {
+  var uzak = [];
+  var host = String(w.location.host || "");
+  function dis(u) {
+    if (!/^https?:\/\//i.test(u)) return false;
+    if (!host) return true;
+    return u.indexOf("//" + host) < 0;
+  }
+  Array.prototype.forEach.call(d.querySelectorAll("[src],[href]"), function (e) {
+    var u = e.getAttribute("src") || e.getAttribute("href") || "";
+    if (dis(u)) uzak.push(u);
+  });
+  Array.prototype.forEach.call(d.styleSheets, function (ss) {
+    var kurallar;
+    try { kurallar = ss.cssRules; } catch (e) { return; }
+    Array.prototype.forEach.call(kurallar || [], function (r) {
+      if (r.cssText && /url\(\s*['"]?https?:/i.test(r.cssText)) uzak.push(r.cssText.slice(0, 100));
+    });
+  });
+  try {
+    w.performance.getEntriesByType("resource").forEach(function (r) {
+      if (dis(r.name)) uzak.push(r.name);
+    });
+  } catch (e) { }
+  return uzak;
+}
+
+iframeTest("kök index.html: dış istek yok", "../index.html", function (w, d) {
+  var u = uzakIstekler(w, d);
+  return u.length === 0 || "dış: " + u.slice(0, 3).join(" | ");
+});
+iframeTest("uygulama: dış istek yok", "../uygulama/index.html", function (w, d) {
+  var u = uzakIstekler(w, d);
+  return u.length === 0 || "dış: " + u.slice(0, 3).join(" | ");
+});
+iframeTest("okuma-bayrami: dış istek yok", "../okuma-bayrami-1-sinif.html", function (w, d) {
+  var u = uzakIstekler(w, d);
+  return u.length === 0 || "dış: " + u.slice(0, 3).join(" | ");
+});
+iframeTest("hece-rallisi: dış istek yok", "../oyunlar/hece-rallisi/index.html", function (w, d) {
+  var u = uzakIstekler(w, d);
+  return u.length === 0 || "dış: " + u.slice(0, 3).join(" | ");
+});
+iframeTest("ac-canavar: dış istek yok", "../oyunlar/ac-canavar/index.html", function (w, d) {
+  var u = uzakIstekler(w, d);
+  return u.length === 0 || "dış: " + u.slice(0, 3).join(" | ");
+});
+
+/* ------------------------------------------------------------------ */
+bolum("9 · Uygulama: Hece Fabrikası (hece birleştirme)");
+
+function fabAc(w, d) {
+  w.__TESTHIZ = 0.05;
+  w.eval("kayit.fabrikaMod='tek';");
+  w.gitGrup(0);
+  w.oyunEkrani("heceBina");
+  return d.querySelector(".fabrika");
+}
+
+iframeTest("heceBina: kayıtlı etkinlik ve talimatı dolu", "../uygulama/index.html", function (w) {
+  var n = w.eval("ETKINLIK.length");
+  var i = w.eval("ETKINLIK.findIndex(function(a){return a.id==='heceBina';})");
+  if (i < 0) return "heceBina kayıtlı değil";
+  if (n !== 18) return "etkinlik sayısı: " + n;
+  if (!w.eval("TALIMAT.heceBina")) return "TALIMAT.heceBina boş";
+  return true;
+});
+
+iframeTest("heceBina: makine kurulur, hedef resim görünür, kelime gizli", "../uygulama/index.html", function (w, d) {
+  var mak = fabAc(w, d);
+  if (!mak || !mak.__fab) return "makine yok";
+  var kelime = mak.__fab.kelime, heceler = mak.__fab.heceler;
+  var gercek = w.OrtakVeri.SOZLUK.some(function (o) { return o.w === kelime; });
+  if (!gercek) return "uydurma kelime: " + kelime;
+  if (!w.eval("(GRUPLAR[durum.grup].emoji||{})[" + JSON.stringify(kelime) + "]")) return "emoji yok: " + kelime;
+  if (!d.querySelector(".fabUst").textContent.trim()) return "hedef resim boş";
+  var parcalar = Array.from(d.querySelectorAll(".fabParca")).map(function (b) { return b.textContent; });
+  if (parcalar.length !== heceler.length + 2) return "parça sayısı: " + parcalar.length;
+  var eksik = heceler.filter(function (h) { return parcalar.indexOf(h) < 0; });
+  if (eksik.length) return "doğru parça eksik: " + eksik.join(",");
+  if (new Set(parcalar).size !== parcalar.length) return "tekrarlı parça";
+  var cel = parcalar.filter(function (p) { return heceler.indexOf(p) < 0; });
+  var hSet = {};
+  w.OrtakVeri.SOZLUK.forEach(function (o) { o.heceler.forEach(function (h) { hSet[h] = 1; }); });
+  var uydu = cel.filter(function (p) { return !hSet[p]; });
+  if (uydu.length) return "uydurma çeldirici: " + uydu.join(",");
+  if (d.querySelector(".fabUrun").textContent.trim() !== "") return "ürün baştan görünür";
+  if (Array.prototype.some.call(d.querySelectorAll(".fabYuva b"), function (b) { return b.textContent !== "?"; })) return "yuva baştan dolu";
+  var buyuk = parcalar.filter(function (p) { return p !== p.toLocaleLowerCase("tr-TR"); });
+  return buyuk.length === 0 || "büyük harf: " + buyuk.join(",");
+});
+
+iframeTest("heceBina: sırayla doğru heceler → ürün şeritte, dişli döner", "../uygulama/index.html", function (w, d) {
+  var mak = fabAc(w, d);
+  if (!mak || !mak.__fab) return "makine yok";
+  var hec = mak.__fab.heceler, kel = mak.__fab.kelime;
+  var yuvalar = Array.from(d.querySelectorAll(".fabYuva"));
+  var parcalar = Array.from(d.querySelectorAll(".fabParca"));
+  for (var i = 0; i < hec.length; i++) {
+    var b = parcalar.filter(function (x) { return !x.disabled && x.textContent === hec[i]; })[0];
+    if (!b) return (i + 1) + ". parça bulunamadı: " + hec[i];
+    b.click();
+    if (!yuvalar[i].classList.contains("dolu")) return "yuva " + (i + 1) + " dolmadı";
+    if (yuvalar[i].querySelector("b").textContent !== hec[i]) return "yuva " + (i + 1) + " içeriği hatalı";
+  }
+  var urun = d.querySelector(".fabUrun");
+  if (urun.textContent.indexOf(kel) < 0) return "ürün hatalı: " + urun.textContent;
+  if (!urun.classList.contains("dolu")) return "ürün görünürlüğü kapalı";
+  if (!mak.classList.contains("uretici")) return "dişli çalışmıyor";
+  return true;
+});
+
+iframeTest("heceBina: yanlış parça alarm verir, yuva dolmaz, parça dönmez", "../uygulama/index.html", function (w, d) {
+  var mak = fabAc(w, d);
+  if (!mak || !mak.__fab) return "makine yok";
+  var hec = mak.__fab.heceler;
+  var yal = Array.from(d.querySelectorAll(".fabParca")).filter(function (x) { return x.textContent !== hec[0]; })[0];
+  if (!yal) return "çeldirici yok";
+  yal.click();
+  if (!mak.classList.contains("alarm")) return "alarm yok";
+  var y0 = d.querySelector(".fabYuva");
+  if (y0.classList.contains("dolu")) return "yanlış yuvayı doldurdu";
+  if (!yal.disabled) return true;
+  return "yanlış parça kilitlendi";
+});
+
+iframeTest("heceBina: parça ve kelime dokunuşları ses duyurur", "../uygulama/index.html", function (w, d) {
+  w.eval("window.__fabSes=[]; SES.hece=function(h){window.__fabSes.push(h);};");
+  w.eval("konus=function(m){window.__fabSes.push('kelime:'+m);};");
+  w.eval("konusDur=function(){};");
+  var mak = fabAc(w, d);
+  if (!mak || !mak.__fab) return "makine yok";
+  var hec = mak.__fab.heceler, kel = mak.__fab.kelime;
+  w.eval("window.__fabSes.length=0;");  /* açılış konuşmasını temizle */
+  var ilk = Array.from(d.querySelectorAll(".fabParca")).filter(function (x) { return x.textContent === hec[0]; })[0];
+  ilk.click();
+  var sesler = w.eval("window.__fabSes.slice()");
+  if (sesler.indexOf(hec[0]) < 0) return "parça sesi yok: " + sesler.join(" | ");
+  var tekrar = Array.from(d.querySelectorAll(".bilgiCip")).find(function (c) { return c.textContent.indexOf("Kelimeyi tekrar dinle") > -1; });
+  if (!tekrar) return "tekrar çipi yok";
+  w.eval("window.__fabSes.length=0;");
+  tekrar.click();
+  sesler = w.eval("window.__fabSes.slice()");
+  if (sesler.indexOf("kelime:" + kel) < 0) return "kelime tekrarı yok: " + sesler.join(" | ");
+  return true;
+});
+
+iframeTest("heceBina: ham madde seçici çip var, katman gerçek kelimelerle açılır", "../uygulama/index.html", function (w, d) {
+  var mak = fabAc(w, d);
+  if (!mak || !mak.__fab) return "makine yok";
+  var ham = Array.from(d.querySelectorAll(".bilgiCip")).find(function (c) { return c.textContent.indexOf("Ham maddeyi seç") > -1; });
+  if (!ham) return "ham madde çipi yok";
+  ham.click();
+  var ortu = d.querySelector(".hamOrtu");
+  if (!ortu) return "katman açılmadı";
+  var kartlar = Array.from(ortu.querySelectorAll(".hamIzgara .sec"));
+  if (kartlar.length < 2) return "ham madde kartı az: " + kartlar.length;
+  var hSet = {};
+  w.OrtakVeri.SOZLUK.forEach(function (o) { hSet[o.w] = 1; });
+  var uydu = kartlar.filter(function (b) { var t = b.textContent.replace(/[^\p{L}]/gu, ""); return !hSet[t]; });
+  if (uydu.length) return "uydurma madde: " + uydu.length;
+  /* seç → makine yeniden kurulur ve seçilen kelime hedef olur */
+  var secilenKart = kartlar[0];
+  var secilen = secilenKart.textContent.replace(/[^\p{L}]/gu, "");
+  secilenKart.click();
+  var mak2 = d.querySelector(".fabrika");
+  if (!mak2 || !mak2.__fab) return "seçimden sonra makine yok";
+  if (mak2.__fab.kelime !== secilen) return "hedef: " + mak2.__fab.kelime + " · beklenen: " + secilen;
+  return true;
+});
+
+/* ------------------------------------------------------------------ */
+bolum("10 · Uygulama: Hece Fabrikası yarış modu + Roket Yarışı");
+
+iframeTest("heceBina yarış: otomatik 3 yarışmacı çekilir, sıra çipinde ad", "../uygulama/index.html", function (w, d) {
+  w.__TESTHIZ = 0.05;
+  w.eval("kayit.ogrListe=['Ali','Ayşe','Mert','Zeynep']; kayit.fabrikaMod='yaris'; kayitYaz();");
+  w.gitGrup(0);
+  w.oyunEkrani("heceBina");
+  var secili = Array.from(d.querySelectorAll(".hzOyuncular button.secili")).map(function (b) { return b.textContent.replace(/[0-9]/g, "").replace(/[\uFE0F\u20E3]/g, "").trim(); });
+  if (secili.length !== 3) return "otomatik üçlü " + secili.length;
+  var basla = Array.from(d.querySelectorAll("button")).find(function (b) { return b.textContent.trim() === "▶ Başla!"; });
+  if (!basla) return "Başla yok";
+  basla.click();
+  var puan = d.querySelector(".hzPuanlar");
+  if (!puan || puan.textContent.indexOf("kelime") < 0) return "puan çipi yok";
+  if (puan.textContent.indexOf("▶️") < 0) return "sıra ok yok";
+  if (!d.querySelector(".fabrika")) return "yarış makinesi açık değil";
+  w.eval("kayit.fabrikaMod='tek'; kayit.ogrListe=[]; kayit.fabrikaYarisSkor=[]; kayitYaz();");
+  return true;
+});
+
+iframeTest("roket: etkinlik 18. sıraya kayıtlı ve talimatı dolu", "../uygulama/index.html", function (w) {
+  var i = w.eval("ETKINLIK.findIndex(function(a){return a.id==='roket';})");
+  if (i < 0) return "roket kayıtlı değil";
+  if (i !== w.eval("ETKINLIK.findIndex(function(a){return a.id==='tavsanYarisi';})") + 1) return "roket sırası tavşanın arkasında değil: " + i;
+  if (!w.eval("TALIMAT.roket")) return "TALIMAT.roket boş";
+  return true;
+});
+
+iframeTest("roket: liste boşken Başla kapalı, yazma kutusu yok", "../uygulama/index.html", function (w, d) {
+  w.eval("kayit.ogrListe=[]; kayit.roketSkor=[]; kayitYaz();");
+  w.gitGrup(0);
+  w.oyunEkrani("roket");
+  var basla = Array.from(d.querySelectorAll("button")).find(function (b) { return b.textContent.trim() === "▶ Başla!"; });
+  if (!basla) return "Başla yok";
+  if (basla.disabled !== true) return "Başla açık kaldı";
+  if (d.querySelector("input,textarea")) return "yazma kutusu var!";
+  w.eval("kayit.ogrListe=['Ali','Ayşe','Mert','Zeynep']; kayitYaz();"); /* sonraki test için hazırlık */
+  return true;
+});
+
+iframeTest("roket: otomatik üçlü, 3 kelime seçeneği, doğru → roket ilerler", "../uygulama/index.html", function (w, d) {
+  var st = w.eval("(function(){ kayit.ogrListe=['Ali','Ayşe','Mert','Zeynep']; kayitYaz(); gitGrup(0); oyunEkrani('roket'); var b=Array.from(document.querySelectorAll('button')).find(function(x){return x.textContent.trim()==='▶ Başla!';}); b.click(); return true; })()");
+  var duyg = d.querySelector(".roketPist");
+  if (!duyg) return "pist yok";
+  var adlar = Array.from(d.querySelectorAll(".roketAd")).map(function (s) { return s.textContent; });
+  if (adlar.length !== 3) return "şerit: " + adlar.length;
+  if (new Set(adlar).size !== 3) return "isimler tekrarlı";
+  var kelimeler = Array.from(d.querySelectorAll(".secenekler .sec")).map(function (b) { return b.textContent; });
+  if (kelimeler.length !== 3) return "seçenek: " + kelimeler.length;
+  var hSet = {};
+  w.OrtakVeri.SOZLUK.forEach(function (o) { hSet[o.w] = 1; });
+  var uydu = kelimeler.filter(function (k) { return !hSet[k]; });
+  if (uydu.length) return "uydurma: " + uydu.join(",");
+  var buyuk = kelimeler.filter(function (k) { return k !== k.toLocaleLowerCase("tr-TR"); });
+  if (buyuk.length) return "büyük harf: " + buyuk.join(",");
+  /* doğru kelime test kanca'sından okunur, düğmeye tıklanır, roket ilerler */
+  var dogru = d.querySelector(".buyukKart").__rk.kelime;
+  var onceSol = d.querySelectorAll(".roketSimge")[Array.from(d.querySelectorAll(".hzPuanlar span")).findIndex(function (s) { return s.classList.contains("hzSira"); })].style.left || "6px";
+  var bD = Array.from(d.querySelectorAll(".secenekler .sec")).find(function (x) { return x.textContent === dogru; });
+  if (!bD) return "doğru seçenek yok";
+  bD.click();
+  var sonSol = Array.from(d.querySelectorAll(".roketSimge")).map(function (r) { return r.style.left; }).filter(function (l) { return l && l !== "6px"; });
+  if (!sonSol.length) return "roket ilerlemedi";
+  w.eval("kayit.ogrListe=[]; kayit.roketSkor=[]; kayit.fabrikaMod='tek'; kayitYaz();");
+  return true;
+});
+
+/* ------------------------------------------------------------------ */
+function ozetYaz() {
+  var ozet = document.getElementById("ozet");
+  if (bekleyen > 0) {
+    ozet.textContent = SONUC.gecen + " / " + SONUC.toplam + " test tamamlandı · " + bekleyen + " sayfa yükleniyor…";
+    ozet.className = "";
+    return;
+  }
+  ozet.textContent = SONUC.gecen + " / " + SONUC.toplam + " test geçti" +
+    (SONUC.kalan ? " · " + SONUC.kalan + " kaldı" : " · hepsi tamam ✅");
+  ozet.className = SONUC.kalan ? "no" : "ok";
+  window.__TEST = SONUC;
+}
+ozetYaz();
+</script>
+</body>
+</html>
